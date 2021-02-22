@@ -554,7 +554,7 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
                     You will need to have <strong>Node.js</strong> and <strong>npm</strong> installed on
                     your environment to try out the SDK.
                 </Text>
-                <Text>To download the LTS (Long Term Support) version of <strong>Node.js </strong>
+                <Text>To download the Long Term Support (LTS) version of <strong>Node.js </strong>
                     (which includes <strong>npm</strong>), navigate to the official <a
                         href="https://nodejs.org/en/download/"
                         target="_blank"

@@ -7,12 +7,20 @@
  * You may not alter or remove any copyright or other notice from copies of this content."
  */
 
-import { TestableComponentInterface } from "@wso2is/core/models";
+import { AlertLevels, TestableComponentInterface } from "@wso2is/core/models";
 import { GenericIcon, GenericIconProps, Heading, PageHeader } from "@wso2is/react-components";
-import React, { FunctionComponent, ReactElement, useState } from "react";
+import React, { FunctionComponent, ReactElement, useEffect, useState } from "react";
 import { Card, Grid, Radio } from "semantic-ui-react";
-import { ApplicationInterface, InboundProtocolListItemInterface } from "../../../../features/applications";
+import {
+    ApplicationInterface,
+    ApplicationListInterface,
+    getApplicationList,
+    InboundProtocolListItemInterface
+} from "../../../../features/applications";
 import { QuickStartModes } from "../models";
+import { useDispatch } from "react-redux";
+import { addAlert } from "@wso2is/core/store";
+import { useTranslation } from "react-i18next";
 
 /**
  * Proptypes for the applications help panel overview component.
@@ -46,7 +54,55 @@ export const QuickStartPanelOverview: FunctionComponent<QuickStartPanelOverviewP
         technologyLogo
     } = props;
 
-    const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(QuickStartModes.INTEGRATE);
+    const { t } = useTranslation();
+
+    const dispatch = useDispatch();
+
+    const [ appList, setAppList ] = useState<ApplicationListInterface>(undefined);
+
+    const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(undefined);
+
+    useEffect(() => {
+        getApplicationList(null, null, null)
+            .then((response) => {
+                setAppList(response);
+
+            })
+            .catch((error) => {
+                if (error.response && error.response.data && error.response.data.description) {
+                    dispatch(addAlert({
+                        description: error.response.data.description,
+                        level: AlertLevels.ERROR,
+                        message: t("console:develop.features.applications.notifications.fetchApplications.error.message")
+                    }));
+
+                    return;
+                }
+
+                dispatch(addAlert({
+                    description: t("console:develop.features.applications.notifications.fetchApplications" +
+                        ".genericError.description"),
+                    level: AlertLevels.ERROR,
+                    message: t("console:develop.features.applications.notifications.fetchApplications.genericError.message")
+                }));
+            });
+    }, []);
+
+    useEffect(() => {
+        if (appList === undefined) {
+            return;
+        }
+        /**
+         * TODO: QuickStartModes.SAMPLES should be selected if there are no applications with the current
+         * 'applicationType'. Use the template ID of the applications in the appList and set selectedIntegration
+         * accordingly.
+         */
+        if (appList?.applications?.length > 1) {
+            setSelectedIntegration(QuickStartModes.INTEGRATE);
+            return;
+        }
+        setSelectedIntegration(QuickStartModes.SAMPLES);
+    }, [appList]);
 
     return (
         <>
@@ -90,7 +146,7 @@ export const QuickStartPanelOverview: FunctionComponent<QuickStartPanelOverviewP
                                                     selectedIntegration === QuickStartModes.INTEGRATE
                                                         ? "card-selected"
                                                         : ""
-                                                    }`
+                                                }`
                                             }
                                             data-testid="integration-mode-selection-card"
                                         >
@@ -131,7 +187,7 @@ export const QuickStartPanelOverview: FunctionComponent<QuickStartPanelOverviewP
                                                     selectedIntegration === QuickStartModes.SAMPLES
                                                         ? "card-selected"
                                                         : ""
-                                                    }`
+                                                }`
                                             }
                                             data-testid="try-out-mode-selection-card"
                                         >

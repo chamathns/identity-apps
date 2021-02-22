@@ -7,17 +7,25 @@
  * You may not alter or remove any copyright or other notice from copies of this content."
  */
 
-import { TestableComponentInterface } from "@wso2is/core/models";
-import React, { FunctionComponent, ReactElement, useState } from "react";
+import { AlertLevels, TestableComponentInterface } from "@wso2is/core/models";
+import React, { FunctionComponent, ReactElement, useEffect, useState } from "react";
 import { Grid } from "semantic-ui-react";
 import { IntegrateSDKs } from "./integrate-sdks";
 import { SupportedTraditionalOIDCAppTechnologyTypes } from "./models";
 import { TryoutSamples } from "./tryout-samples";
-import { ApplicationInterface, ApplicationTemplateInterface } from "../../../../features/applications/models";
+import {
+    ApplicationInterface,
+    ApplicationListInterface,
+    ApplicationTemplateInterface
+} from "../../../../features/applications/models";
 import { getTechnologyLogos } from "../../../../features/core/configs";
 import JavaLogo from "../../../assets/images/icons/java-logo.svg";
 import { QuickStartModes } from "../../shared";
 import { QuickStartPanelOverview, TechnologySelection } from "../../shared/components";
+import { getApplicationList } from "../../../../features/applications/api";
+import { useDispatch } from "react-redux";
+import { addAlert } from "@wso2is/core/store";
+import { useTranslation } from "react-i18next";
 
 /**
  * Prop types of the component.
@@ -37,7 +45,7 @@ interface TraditionalOIDCWebApplicationQuickStartPropsInterface extends Testable
  */
 const TraditionalOIDCWebApplicationQuickStart: FunctionComponent<
     TraditionalOIDCWebApplicationQuickStartPropsInterface> = (
-        props: TraditionalOIDCWebApplicationQuickStartPropsInterface
+    props: TraditionalOIDCWebApplicationQuickStartPropsInterface
 ): ReactElement => {
 
     const {
@@ -48,12 +56,52 @@ const TraditionalOIDCWebApplicationQuickStart: FunctionComponent<
         [ "data-testid" ]: testId
     } = props;
 
+    const { t } = useTranslation();
+
+    const dispatch = useDispatch();
     const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(QuickStartModes.INTEGRATE);
     const [
         selectedTechnology,
         setSelectedTechnology
     ] = useState<SupportedTraditionalOIDCAppTechnologyTypes>(undefined);
+    const [ appList, setAppList ] = useState<ApplicationListInterface>(undefined);
 
+    useEffect(() => {
+        getApplicationList(null, null, null)
+            .then((response) => {
+                setAppList(response);
+
+            })
+            .catch((error) => {
+                if (error.response && error.response.data && error.response.data.description) {
+                    dispatch(addAlert({
+                        description: error.response.data.description,
+                        level: AlertLevels.ERROR,
+                        message: t("console:develop.features.applications.notifications.fetchApplications.error.message")
+                    }));
+
+                    return;
+                }
+
+                dispatch(addAlert({
+                    description: t("console:develop.features.applications.notifications.fetchApplications" +
+                        ".genericError.description"),
+                    level: AlertLevels.ERROR,
+                    message: t("console:develop.features.applications.notifications.fetchApplications.genericError.message")
+                }));
+            });
+    }, []);
+
+    useEffect(() => {
+        if (appList === undefined) {
+            return;
+        }
+        if (appList?.applications?.length > 1) {
+            setSelectedIntegration(QuickStartModes.INTEGRATE);
+            return;
+        }
+        setSelectedIntegration(QuickStartModes.SAMPLES);
+    }, [appList]);
     const handleIntegrateSelection = (selection: QuickStartModes): void => {
         setSelectedIntegration(selection);
     };
@@ -88,7 +136,6 @@ const TraditionalOIDCWebApplicationQuickStart: FunctionComponent<
 
     const resetTabState = () => {
         setSelectedTechnology(undefined);
-        setSelectedIntegration(QuickStartModes.INTEGRATE);
     };
 
     const resolveTechnologyLogo = (technology: SupportedTraditionalOIDCAppTechnologyTypes) => {

@@ -69,7 +69,6 @@ export const AddUserStepContent: FunctionComponent<AddUserStepContentPropsInterf
             <Text compact>
                 You will need a consumer user account to login to the sample application.
             </Text>
-            <Divider hidden />
             {
                 hasRequiredScopes(featureConfig?.users,
                     featureConfig?.users?.scopes?.create,
@@ -86,7 +85,7 @@ export const AddUserStepContent: FunctionComponent<AddUserStepContentPropsInterf
                                         "noopener");
                                 } }
                                 className="external-link link pointing primary"
-                            >user management <Icon name="external"/></a>
+                            >user management. <Icon name="external"/></a>
                             </Text>
                             <PrimaryButton
                                 className="mt-3"

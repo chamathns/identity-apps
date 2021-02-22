@@ -16,8 +16,8 @@
  * under the License.
  */
 
-import { TestableComponentInterface } from "@wso2is/core/models";
-import React, { FunctionComponent, ReactElement, useState } from "react";
+import { AlertLevels, TestableComponentInterface } from "@wso2is/core/models";
+import React, { FunctionComponent, ReactElement, useEffect, useState } from "react";
 import { Grid } from "semantic-ui-react";
 import AngularLogo from "./assets/angular-logo.svg";
 import JavaScriptLogo from "./assets/javascript-logo.svg";
@@ -25,9 +25,17 @@ import ReactLogo from "./assets/react-icon.svg";
 import { IntegrateSDKs } from "./integrate-sdks";
 import { SupportedSPATechnologyTypes } from "./models";
 import { TryoutSamples } from "./tryout-samples";
-import { ApplicationInterface, ApplicationTemplateInterface } from "../../../../features/applications/models";
+import {
+    ApplicationInterface,
+    ApplicationListInterface,
+    ApplicationTemplateInterface
+} from "../../../../features/applications/models";
 import { QuickStartModes } from "../../shared";
 import { QuickStartPanelOverview, TechnologySelection } from "../../shared/components";
+import { getApplicationList } from "../../../../features/applications/api";
+import { useDispatch } from "react-redux";
+import { addAlert } from "@wso2is/core/store";
+import { useTranslation } from "react-i18next";
 
 /**
  * Prop types of the component.
@@ -57,8 +65,50 @@ const SinglePageApplicationQuickStart: FunctionComponent<SinglePageApplicationQu
         [ "data-testid" ]: testId
     } = props;
 
-    const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(QuickStartModes.INTEGRATE);
+    const { t } = useTranslation();
+
+    const dispatch = useDispatch();
+
+    const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(undefined);
     const [ selectedTechnology, setSelectedTechnology ] = useState<SupportedSPATechnologyTypes>(undefined);
+    const [ appList, setAppList ] = useState<ApplicationListInterface>(undefined);
+
+    useEffect(() => {
+        getApplicationList(null, null, null)
+            .then((response) => {
+                setAppList(response);
+
+            })
+            .catch((error) => {
+                if (error.response && error.response.data && error.response.data.description) {
+                    dispatch(addAlert({
+                        description: error.response.data.description,
+                        level: AlertLevels.ERROR,
+                        message: t("console:develop.features.applications.notifications.fetchApplications.error.message")
+                    }));
+
+                    return;
+                }
+
+                dispatch(addAlert({
+                    description: t("console:develop.features.applications.notifications.fetchApplications" +
+                        ".genericError.description"),
+                    level: AlertLevels.ERROR,
+                    message: t("console:develop.features.applications.notifications.fetchApplications.genericError.message")
+                }));
+            });
+    }, []);
+
+    useEffect(() => {
+        if (appList === undefined) {
+            return;
+        }
+        if (appList?.applications?.length > 1) {
+            setSelectedIntegration(QuickStartModes.INTEGRATE);
+            return;
+        }
+        setSelectedIntegration(QuickStartModes.SAMPLES);
+    }, [appList]);
 
     const handleIntegrateSelection = (selection: QuickStartModes): void => {
         setSelectedIntegration(selection);
@@ -93,7 +143,6 @@ const SinglePageApplicationQuickStart: FunctionComponent<SinglePageApplicationQu
 
     const resetTabState = () => {
         setSelectedTechnology(undefined);
-        setSelectedIntegration(QuickStartModes.INTEGRATE);
     };
 
     const resolveTechnologyLogo = (technology: SupportedSPATechnologyTypes) => {

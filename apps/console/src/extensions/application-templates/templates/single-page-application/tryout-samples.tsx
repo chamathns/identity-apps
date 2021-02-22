@@ -206,7 +206,7 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                             spaced="right"
                             floated="left"
                         />
-                        Download { technology } Sample
+                        Download { technology } sample
                         <Icon name="download" className="ml-2" />
                     </Button>
                     <Button
@@ -246,7 +246,7 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                             spaced="right"
                             floated="left"
                         />
-                        Download { technology } Sample
+                        Download { technology } sample
                         <Icon name="download" className="ml-2" />
                     </Button>
                     <Button
@@ -286,7 +286,7 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                             spaced="right"
                             floated="left"
                         />
-                        Download { technology } Sample
+                        Download { technology } sample
                         <Icon name="download" className="ml-2" />
                     </Button>
                     <Button
@@ -318,8 +318,9 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
             return (
                 <>
                     <Text>
-                        Copy the configuration and replace the content of the <code className="inline-code">config.json
-                        </code> file in the sample.
+                        Copy the following configuration and replace the content of the
+                        <code className="inline-code">config.json</code> file found in the
+                        <code className="inline-code">asgardeo-react-app/src</code> sample folder.
                     </Text>
                     <div className="code-segment">
                         <CodeEditor
@@ -338,17 +339,6 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                         />
                     </div>
                     <Divider hidden />
-                    <Text>
-                        You can find the <code className="inline-code">config.json</code> file under <code
-                        className="inline-code">asgardeo-react-app/src</code>
-                    </Text>
-                    <GenericIcon
-                        icon={ ReactConfigCopyingIllustration }
-                        size="large"
-                        transparent
-                        className="download-illustration"
-                    />
-                    <Divider hidden/>
                 </>
             );
         } else if (technology === SupportedSPATechnologyTypes.JAVASCRIPT) {
@@ -382,8 +372,9 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
             return (
                 <>
                     <Text>
-                        Copy the configuration and replace content in <code className="inline-code">config.json
-                        </code> file in the sample.
+                        Copy the following configuration and replace the content of the
+                        <code className="inline-code">config.json</code> file found in the
+                        <code className="inline-code">asgardeo-angular-app/src</code> sample folder.
                     </Text>
                     <div className="code-segment">
                         <CodeEditor
@@ -402,17 +393,6 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                         />
                     </div>
                     <Divider hidden />
-                    <Text>
-                        You can find the <code className="inline-code">config.json</code> file under <code
-                        className="inline-code">asgardeo-angular-app/src</code>
-                    </Text>
-                    <GenericIcon
-                        icon={ AngularConfigCopyingIllustration }
-                        size="large"
-                        transparent
-                        className="download-illustration"
-                    />
-                    <Divider hidden/>
                 </>
             );
         }
@@ -580,7 +560,7 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                     You will need to have <strong>Node.js</strong> and <strong>npm</strong> installed on
                     your environment to try out the samples.
                 </Text>
-                <Text>To download the LTS (Long Term Support) version of <strong>Node.js </strong>
+                <Text>To download the Long Term Support (LTS) version of <strong>Node.js </strong>
                     (which includes <strong>npm</strong>), navigate to the official <a
                         href="https://nodejs.org/en/download/"
                         target="_blank"

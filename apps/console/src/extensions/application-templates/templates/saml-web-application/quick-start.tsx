@@ -45,7 +45,7 @@ const TraditionalSAMLWebApplicationQuickStart: FunctionComponent<
         [ "data-testid" ]: testId
     } = props;
 
-    const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(QuickStartModes.INTEGRATE);
+    const [ selectedIntegration, setSelectedIntegration ] = useState<QuickStartModes>(undefined);
     const [
         selectedTechnology,
         setSelectedTechnology
