@@ -1,0 +1,511 @@
+/*!
+ * Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
+/*******************************
+         Theme Overrides
+*******************************/
+
+.ui.menu {
+    &.app-header, &.app-footer {
+        .item {
+            &:hover, &:active, &:focus, &:visited {
+                background: transparent;
+            }
+        }
+    }
+    &.app-header {
+        display: @appHeaderDisplay;
+        background: @appHeaderBackground;
+        height: @appHeaderHeight;
+        box-shadow: @appHeaderBoxShadow;
+        border-bottom: @appHeaderBorderBottom;
+
+        .app-header-container {
+            background: @appHeaderContainerBackground;
+
+            .icon.bars {
+                color: @appHeaderHamburgerIconColor;
+            }
+        }
+        &.has-announcement {
+            display: block;
+            height: auto;
+        }
+        .header-extensions {
+            .item.portal-switch {
+                background: @appHeaderPortalSwitchExtensionBackgroundColor;
+                color: @appHeaderPortalSwitchExtensionColor;
+
+                &.active {
+                    color: @appHeaderPortalSwitchExtensionActiveColor;
+                    border-bottom: @appHeaderPortalSwitchExtensionActiveBorderBottom;
+                }
+            }
+        }
+        .user-dropdown {
+            &:hover, &:active, &:focus {
+                background: transparent;
+            }
+            .divider {
+                margin: 0;
+            }
+            .user-dropdown-trigger {
+                .username {
+                    color: @userDropdownTriggerTextColor;
+                    min-width: 100px;
+                    display: inline-block;
+                    margin-right: 0.7em;
+                    text-align: right;
+                }
+            }
+            .menu {
+                min-width: @userDropdownMinWidth;
+                padding: @userDropdownPadding;
+
+                .header {
+                    border-bottom: 1px solid @defaultBorderColor;
+
+                    .content{
+                        padding-left: 15px;
+
+                        .description {
+                            margin-top: 0;
+
+                            .name {
+                                font-weight: bold;
+                                min-width: 100px;
+                            }
+                            .email {
+                                color: @nobel;
+                                min-width: 100px;
+                            }
+                        }
+                    }
+                }
+                .tenants-list {
+                    max-height: 200px;
+                    overflow: auto;
+
+                    .tenant-account {
+                        border-radius: @defaultBorderRadius !important;
+                        margin: @userDropdownTenantMargin;
+                        padding: @userDropdownTenantPadding !important;
+                        border: none;
+                        transition: none !important;
+
+                        &:hover {
+                            cursor: pointer;
+                            background: darken(@whiteSmoke, 2);
+                        }
+                        .name {
+                            font-weight: 400;
+                        }
+                        .email {
+                            color: @nobel;
+                        }
+                    }
+                }
+                .linked-accounts-list {
+                    max-height: 200px;
+                    overflow: auto;
+                    border-bottom: 1px solid @defaultBorderColor;
+
+                    .linked-account {
+                        border-radius: @defaultBorderRadius !important;
+                        margin: @userDropdownLinkedAccountMargin;
+                        border: none;
+                        transition: none !important;
+
+                        &:hover {
+                            cursor: pointer;
+                            background: darken(@whiteSmoke, 2);
+                        }
+                        .name {
+                            font-weight: 400;
+                        }
+                        .email {
+                            color: @nobel;
+                        }
+                    }
+                }
+                .action-panel {
+                    border: none;
+                    margin: @userDropdownLinkMargin;
+                    padding: 1.2em 1em!important;
+                    border-radius: @defaultBorderRadius;
+
+                    &:last-child {
+                        margin-bottom: 0 !important;
+                    }
+                    &.no-hover {
+                        &:hover {
+                            background: transparent !important;
+                        }
+                    }
+                    .link-icon {
+                        color: @textColor;
+                    }
+                    .link-text {
+                        color: @textColor;
+                        text-decoration: none;
+                    }
+                    .action-button {
+                        background: #f8f8f8;
+                        border: 1px solid #c6c6c6;
+                        line-height: 28px;
+                        padding: 6px 20px;
+                        color: #666;
+
+                        &, &:hover {
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+        &:not(.fluid-header) {
+            .user-dropdown {
+                padding-right: 0;
+            }
+        }
+        .ui.dropdown.item.user-dropdown .menu .item.linked-account {
+            &, &:not(.filtered) {
+                display: flex;
+                padding: @relativeMini @relativeLarge;
+            }
+        }
+        .ui.dropdown.item.user-dropdown .menu .item.tenant-account {
+            &, &:not(.filtered) {
+                display: flex;
+                padding: @relativeMini @relativeLarge;
+            }
+        }
+        .ui.dropdown.item.user-dropdown .menu .item.header {
+            &, &:not(.filtered) {
+                display: flex;
+                padding: @relativeMini @relativeLarge;
+            }
+            .ui.divider {
+                margin: 0.5rem 0rem;
+            }
+        }
+
+        .secondary-panel {
+            display: @appHeaderSecondaryPanelDisplay;
+            box-shadow: @appHeaderSecondaryPanelBoxShadow;
+            border-left: @appHeaderSecondaryPanelBorderLeft;
+            border-right: @appHeaderSecondaryPanelBorderRight;
+            border-bottom: @appHeaderSecondaryPanelBorderBottom;
+            border-top: @appHeaderSecondaryPanelBorderTop;
+            background: @appHeaderSecondaryPanelBackground;
+            height: @appHeaderSecondaryPanelHeight;
+
+            .ui.container {
+                height: @appHeaderSecondaryPanelContainerHeight;
+            }
+            .inner-menu {
+                box-shadow: @appHeaderSecondaryPanelInnerMenuBoxShadow;
+                border: @appHeaderSecondaryPanelInnerMenuBorder;
+                border-radius: @appHeaderSecondaryPanelInnerMenuBorderRadius;
+                background: @appHeaderSecondaryPanelInnerMenuBackground;
+                height: @appHeaderSecondaryPanelInnerMenuHeight;
+                
+                .item.portal-switch {
+                    background: @appHeaderSecondaryPanelPortalSwitchBackground;
+                    color: @appHeaderSecondaryPanelPortalSwitchColor;
+                    border-bottom: @appHeaderSecondaryPanelPortalSwitchBorderBottom;
+                    
+                    &.active {
+                        background: @appHeaderSecondaryPanelPortalSwitchActiveBackground;
+                        color: @appHeaderSecondaryPanelPortalSwitchActiveColor;
+                        border-bottom: @appHeaderSecondaryPanelPortalSwitchActiveBorderBottom;
+                    }
+
+                    &:not(.active) {
+                        border-bottom: @appHeaderSecondaryPanelPortalSwitchInactiveBorderBottom;
+                    }
+                    
+                    &:first-child {
+                        margin-left: @appHeaderSecondaryPanelPortalSwitchesLeftSpacing;
+                    }
+                }
+            }
+        }
+    }
+
+    &.app-footer {
+        background: @appFooterBackground;
+        height: @appFooterHeight;
+
+        .footer-link, .footer-dropdown .dropdown-trigger.link {
+            color: @appFooterLinkColor;
+
+            &:hover {
+                text-decoration: @appFooterLinkTextDecoration;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.ui.vertical.menu {
+    &.governance-connector-categories {
+        width: @governanceConnectorCategoriesMenuWidth;
+
+        .item.active {
+            border-left: @activeBorderWidth @primaryColor solid;
+        }
+    }
+
+    &.side-panel {
+        // override the box shadow and border in the semantic ui menu component
+        box-shadow: none;
+        border-radius: 0;
+
+        &.desktop {
+            border: none;
+
+            .side-panel-item {
+                &:before {
+                    display: none;
+                }
+            }
+        }
+
+        &.mobile {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+
+            .side-panel-item {
+                .caret {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .side-panel-category {
+            font-size: @sidePanelCategoryFontSize;
+            text-transform: @sidePanelCategoryTextTransform;
+            color: @lightFontColor;
+            padding-left: @itemHorizontalPadding;
+            margin-bottom: @sidePanelCategoryMarginBottom;
+
+            &.with-dividers {
+                &:not(:first-child) {
+                    &:before {
+                        content: "";
+                        display: block;
+                        width: 100%;
+                        background-color: @defaultBorderColor;
+                        height: 1px;
+                        margin: @sidePanelCategoryDividerMargin;
+                    }
+                }
+            }
+        }
+
+        .side-panel-item {
+            border-radius: @defaultBorderRadius;
+            padding: @sidePanelItemPadding;
+
+            .route-name {
+                cursor: pointer;
+                color: @sidePanelDefaultFontColor;
+                padding: 10px 5px;
+
+                .feature-status-label {
+                    padding: 3px 6px;
+                    margin-left: 6px;
+                    font-size: 0.6em;
+                    font-weight: 600;
+                }
+            }
+
+            svg, .icon {
+                display: inline-block;
+                vertical-align: middle;
+                line-height: 1;
+
+                .path {
+                    fill: @sidePanelDefaultFontColor;
+                }
+            }
+
+            .left-icon {
+                margin-top: -2px;
+            }
+
+            .caret {
+                margin-right: -4px;
+                margin-top: 2px;
+                transition: transform .3s ease-in-out;
+
+                svg.icon {
+                    height: 10px;
+                    width: 10px;
+                }
+                &.down {
+                    transform: rotate(90deg);
+                }
+            }
+
+            &.hover-background {
+                margin-top: @sidePanelBackgroundHoveredItemMarginTop;
+            }
+
+            &.active {
+                &.hover-highlighted {
+                    // override semantic ui menu item active background color
+                    background-color: transparent;
+
+                    .route-name {
+                        color: @sidePanelActiveFontColor;
+                    }
+                    svg, .icon {
+                        .path {
+                            fill: @sidePanelActiveFontColor;
+                        }
+                    }
+                }
+            }
+
+            &:hover {
+                &.hover-highlighted {
+                    // override semantic ui menu item hover background color
+                    background-color: transparent;
+
+                    .route-name {
+                        color: @sidePanelHoverFontColor;
+                    }
+                    svg, .icon {
+                        .path {
+                            fill: @sidePanelHoverFontColor;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.relaxed {
+            .side-panel-category {
+                margin-bottom: @sidePanelCategoryRelaxedMarginBottom;
+            }
+
+            .side-panel-item {
+                &.hover-background {
+                    margin-bottom: @sidePanelBackgroundHoveredItemRelaxedMarginBottom;
+                }
+            }
+        }
+
+        .child-routes {
+            padding-left: @sidePanelChildItemGroupLeftPadding;
+            max-height: 0;
+            visibility: hidden;
+            overflow: hidden;
+            transition: max-height 0.5s ease 0s, visibility 0.5s ease 0s;
+
+            &.open {
+                visibility: visible;
+            }
+            .item {
+                font-size: inherit;
+                padding: @sidePanelChildItemPadding;
+
+                .left-icon {
+                    height: 8px;
+                    width: 8px;
+                    margin-top: 3px;
+                }
+            }
+            .categorized {
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+}
+
+// Fix for the unstackable list item images getting weird sizes on mobile.
+@media only screen and (max-width: @tabletBreakpoint) {
+    .ui.menu {
+        &.app-header {
+            .user-dropdown {
+                .authenticated-user {
+                    .ui.image.user-image.x60 {
+                        width: 60px !important;
+                    }
+                }
+                .linked-accounts-list {
+                    .ui.image.user-image.little {
+                        width: @littleWidth !important;
+                    }
+                }
+            }
+            // Fix for username and avatar in the header being pushed right to the right edge in tablet view
+            &:not(.fluid-header) {
+                .user-dropdown {
+                    padding-right: 0.92857143em;
+                }
+            }
+        }
+    }
+}
+
+/*-------------------
+      Pagination
+--------------------*/
+
+.ui.pagination.menu {
+    &.list-pagination {
+        box-shadow: @listPaginationBoxShadow;
+        border: @listPaginationBorder;
+        background: @listPaginationBackground;
+        font-size: @listPaginationFontSize;
+
+        > .item {
+            border: @listPaginationItemBorder;
+            border-radius: @listPaginationItemBorderRadius;
+            background: @listPaginationItemBackground;
+            color: @listPaginationItemColor;
+
+            &:hover {
+                color: @listPaginationItemHoverColor;
+                border-color: @listPaginationItemHoverBorderColor;
+                background: @listPaginationItemHoverBackground;
+            }
+            &.active {
+                color: @listPaginationItemActiveColor;
+                border-color: @listPaginationItemActiveBorderColor;
+                background: @listPaginationItemActiveBackground;
+            }
+            &:not(:last-child) {
+                margin-right: @listPaginationMarginRight;
+            }
+            &:before {
+                display: none;
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}

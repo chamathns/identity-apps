@@ -1,0 +1,185 @@
+/**
+ * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.com). All Rights Reserved.
+ *
+ * This software is the property of WSO2 Inc. and its suppliers, if any.
+ * Dissemination of any information or reproduction of any material contained
+ * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
+ * You may not alter or remove any copyright or other notice from copies of this content."
+ */
+
+import { Forms } from "@wso2is/forms";
+import { GenericIcon } from "@wso2is/react-components";
+import React, { FunctionComponent, ReactElement, SyntheticEvent, useState } from "react";
+import { Card, Dimmer } from "semantic-ui-react";
+import ConsumerUserImage from "../../../../assets/illustrations/consumer-user.svg";
+import GuestUserImage from "../../../../assets/illustrations/guest-user.svg";
+import WorkUserImage from "../../../../assets/illustrations/work-user.svg";
+import { UserAccountTypes } from "../../pages";
+
+interface UserTypeSelectionProps {
+    triggerSubmit: boolean;
+    initialValues: any;
+    onSubmit: (values: any) => void;
+}
+
+/**
+ * User type selection component.
+ *
+ * @param props
+ */
+export const UserTypeSelection: FunctionComponent<UserTypeSelectionProps> = (
+    props: UserTypeSelectionProps
+): ReactElement => {
+
+    const {
+        triggerSubmit,
+        initialValues,
+        onSubmit
+    } = props;
+
+    const [ userTypeSelection, setUserTypeSelection ] = useState<string>(initialValues?.userType);
+    const [ dimmerShow, setDimmerShow ] = useState<boolean>(false);
+
+    /**
+     * Handles the user type selection.
+     *
+     * @param {React.SyntheticEvent} e - Click event.
+     * @param {string} id - User Type.
+     */
+    const handleUserTypeSelection = (e: SyntheticEvent, { id }: { id: string }): void => {
+        setUserTypeSelection(id);
+    };
+
+    return (
+        <Forms
+            data-testid="asgardeo-user-type-selection"
+            onSubmit={ () => {
+                onSubmit({ userType: userTypeSelection });
+                setUserTypeSelection("");
+            } }
+            submitState={ triggerSubmit }
+        >
+            <Card.Group centered className="mt-5 mb-5">
+                <Card
+                    as={ "div" }
+                    link={ false }
+                    className={
+                        `user-selection-card ${
+                            userTypeSelection === UserAccountTypes.CONSUMER
+                                ? "selected underlined-selection"
+                                : ""
+                        }`
+                    }
+                    size="mini"
+                    centered
+                    inline
+                    id="Consumer"
+                    selected={ userTypeSelection === UserAccountTypes.CONSUMER }
+                    onClick={ handleUserTypeSelection }
+                >
+                    <Card.Content className="card-image-container">
+                        <GenericIcon
+                            as={ "data-url" }
+                            size="small"
+                            icon={ ConsumerUserImage }
+                            square
+                            transparent
+                        />
+                    </Card.Content>
+                    <Card.Content
+                        className="card-text-container consumer no-content-top-border"
+                    >
+                        <Card.Header>
+                            Consumer Account
+                        </Card.Header>
+                        <Card.Description>
+                            Users that access applications registered in your tenant.
+                        </Card.Description>
+                    </Card.Content>
+                </Card>
+                <Card
+                    as={ "div" }
+                    link={ false }
+                    className={
+                        `user-selection-card ${
+                            userTypeSelection === UserAccountTypes.GUEST
+                                ? "selected underlined-selection"
+                                : ""
+                        }`
+                    }
+                    size="mini"
+                    centered
+                    id="Guest"
+                    selected={ userTypeSelection === UserAccountTypes.GUEST }
+                    inline
+                    onClick={ handleUserTypeSelection }
+                >
+                    <Card.Content className="card-image-container">
+                        <GenericIcon
+                            className="card-image"
+                            size="small"
+                            icon={ GuestUserImage }
+                            square
+                            transparent
+                        />
+                    </Card.Content>
+                    <Card.Content className="card-text-container no-content-top-border">
+                        <Card.Header>
+                            Guest Account
+                        </Card.Header>
+                        <Card.Description>
+                            Invite an external collaborator to manage your tenant. This user will receive
+                            an email invitation they can accept in order to begin collaborating.
+                        </Card.Description>
+                    </Card.Content>
+                </Card>
+                <Card
+                    as={ "div" }
+                    link={ false }
+                    className="disabled-card"
+                    size="default"
+                    centered
+                    disabled
+                    id="Work"
+                    inline
+                    onClick={ handleUserTypeSelection }
+                >
+                    <Dimmer.Dimmable
+                        style={ { height: "290px", borderColor: "#e7e7e8 !important" } }
+                        as={ Card }
+                        dimmed={ dimmerShow }
+                        onMouseEnter={ () => setDimmerShow(true) }
+                        onMouseLeave={ () => setDimmerShow(false) }
+                    >
+                        <Card.Content className="card-image-container">
+                            <GenericIcon
+                                size="small"
+                                icon={ WorkUserImage }
+                                square
+                                transparent
+                            />
+                        </Card.Content>
+                        <Card.Content className="card-text-container no-content-top-border">
+                            <Card.Header>
+                                Work Account
+                            </Card.Header>
+                            <Card.Description>
+                                Create a new user in your organization who will consume applications and can
+                                have privileges in the Asgardeo console. This user will belong to your
+                                organization’s domain.
+                            </Card.Description>
+                        </Card.Content>
+                        <Dimmer
+                            active={ dimmerShow }
+                            className="lighter"
+                        >
+                            <p style={ { lineHeight: "1.5em !important" } }>
+                                This feature will be available soon!
+                            </p>
+                        </Dimmer>
+                    </Dimmer.Dimmable>
+                </Card>
+            </Card.Group>
+        </Forms>
+    );
+};
