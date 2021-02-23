@@ -10,15 +10,13 @@
 import { AlertInterface, AlertLevels, TestableComponentInterface } from "@wso2is/core/models";
 import { addAlert } from "@wso2is/core/store";
 import { EncodeDecodeUtils } from "@wso2is/core/utils";
-import { Code, CodeEditor, GenericIcon, Heading, Text } from "@wso2is/react-components";
+import { Code, CodeEditor, CodeEditorProps, GenericIcon, Heading, Text } from "@wso2is/react-components";
 import isEmpty from "lodash/isEmpty";
 import React, { FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Divider, Icon, Message } from "semantic-ui-react";
-import AngularConfigCopyingIllustration from "./assets/angular-config-copying-illustration.svg";
+import { Button, Divider, Icon, Header, Message, Popup } from "semantic-ui-react";
 import { ReactComponent as AngularLogo } from "./assets/angular-logo.svg";
 import { ReactComponent as JavaScriptLogo } from "./assets/javascript-logo.svg";
-import ReactConfigCopyingIllustration from "./assets/react-config-copying-illustration.svg";
 import { SDKMeta } from "./meta";
 import { SupportedSPATechnologyTypes } from "./models";
 import {
@@ -39,10 +37,10 @@ import { AddUserStepContent } from "../../shared/components";
 
 interface TryoutSamplesPropsInterface extends TestableComponentInterface {
     application: ApplicationInterface;
-    template: ApplicationTemplateInterface;
-    technology: SupportedSPATechnologyTypes;
     inboundProtocolConfig: any;
     onApplicationUpdate: () => void;
+    technology: SupportedSPATechnologyTypes;
+    template: ApplicationTemplateInterface;
 }
 
 /**
@@ -400,105 +398,85 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
         return null;
     };
 
+    const spaSampleAppRunningStepInstructionsJSX = (): ReactElement => {
+        return (
+            <p className="mt-2">
+                Run the following command at the root of the project to start up the sample application.
+                The app will be accessible at <a
+                href="https://localhost:5000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="clickable-link">
+                https://localhost:5000</a>
+                &nbsp;
+                <Popup
+                    content={
+                        "Opening the app in your browser might cause a Certificate Not Trusted " +
+                        "warning since the sample app is using a self-signed certificate. " +
+                        "Instruct your browser to trust that certificate to proceed."
+                    }
+                    inverted
+                    trigger={ <Icon color="orange" name="help circle"/> }
+                    position="bottom center"
+                />
+            </p>
+        )
+    };
+
+    const spaSampleAppRunningStepCommandJSX = (props: CodeEditorProps = {}): ReactElement => {
+        return (
+            <CodeEditor
+                { ...props }
+                oneLiner
+                readOnly
+                withClipboardCopy
+                language="javascript"
+                sourceCode="npm install && npm start"
+            />
+        );
+    };
+
+    const spaSampleAppRepoLinkJSX = (link: string): ReactElement => {
+        return (
+            <div className="mt-3">
+                For more guidance, navigate to our <a
+                href={ link }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="clickable-link"
+            >
+                <Icon name="github"/>Github repository
+            </a>
+            </div>
+        );
+    };
+
     const generateRunStep = (technology: SupportedSPATechnologyTypes): ReactNode => {
 
         if (technology === SupportedSPATechnologyTypes.REACT) {
             return (
                 <>
-                    <p className="mt-2">
-                        Run the following command at the root of the project to start up the sample application.
-                        The app will be accessible at <a
-                        href="https://localhost:5000"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="clickable-link"
-                    >https://localhost:5000</a>.
-                    </p>
-                    <CodeEditor
-                        oneLiner
-                        readOnly
-                        withClipboardCopy
-                        language="javascript"
-                        sourceCode="npm install && npm start"
-                    />
-                    <div className="mt-3">
-                        For more guidance, navigate to our <a
-                        href={ SDKMeta.react.repository }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="clickable-link"
-                    >
-                        <Icon name="github"/>Github repository
-                    </a>
-                    </div>
+                    { spaSampleAppRunningStepInstructionsJSX() }
+                    { spaSampleAppRunningStepCommandJSX() }
+                    { spaSampleAppRepoLinkJSX(SDKMeta.react.repository) }
                 </>
             );
         }
-
         if (technology === SupportedSPATechnologyTypes.ANGULAR) {
             return (
                 <>
-                    <p className="mt-2">
-                        Run the following command at the root of the project to start up the sample application.
-                        The app will be accessible at <a
-                            href="https://localhost:5000"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="clickable-link"
-                        >https://localhost:5000</a>.
-                    </p>
-                    <CodeEditor
-                        oneLiner
-                        readOnly
-                        withClipboardCopy
-                        language="javascript"
-                        sourceCode="npm install && npm start"
-                    />
-                    <div className="mt-3">
-                        For more guidance, navigate to our <a
-                        href={ SDKMeta.angular.repository }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link external"
-                    >
-                        <Icon name="github"/>Github repository
-                    </a>
-                    </div>
+                    { spaSampleAppRunningStepInstructionsJSX() }
+                    { spaSampleAppRunningStepCommandJSX() }
+                    { spaSampleAppRepoLinkJSX(SDKMeta.angular.repository) }
                 </>
             );
         }
-
         if (technology === SupportedSPATechnologyTypes.JAVASCRIPT) {
             return (
                 <>
-                    <p className="mt-2">
-                        Run the following command at the root of the project to start up the sample application.
-                        The app will be accessible at <a
-                            href="https://localhost:5000"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="clickable-link"
-                        >https://localhost:5000</a>.
-                        If opening the app in your browser results in an invalid-certificate error,
-                        just type <code className="inline-code">thisisunsafe</code> on the keyboard to open the app.
-                    </p>
-                    <CodeEditor
-                        oneLiner
-                        readOnly
-                        withClipboardCopy
-                        language="javascript"
-                        sourceCode="npm install && npm start"
-                    />
-                    <div className="mt-3">
-                        For more guidance, navigate to our <a
-                        href={ SDKMeta.javascript.repository }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link external"
-                    >
-                        <Icon name="github"/>Github repository
-                    </a>
-                    </div>
+                    { spaSampleAppRunningStepInstructionsJSX() }
+                    { spaSampleAppRunningStepCommandJSX() }
+                    { spaSampleAppRepoLinkJSX(SDKMeta.javascript.repository) }
                 </>
             );
         }
@@ -555,19 +533,32 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
 
         return (
             <div className="mt-3 mb-6">
-                <Heading as="h3">Prerequisite</Heading>
-                <Text>
-                    You will need to have <strong>Node.js</strong> and <strong>npm</strong> installed on
-                    your environment to try out the samples.
-                </Text>
-                <Text>To download the Long Term Support (LTS) version of <strong>Node.js </strong>
-                    (which includes <strong>npm</strong>), navigate to the official <a
-                        href="https://nodejs.org/en/download/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link external"
-                    >downloads</a> page.
-                </Text>
+                <Message
+                    info
+                    header={ (
+                        <Header as='h3'>
+                            <Header.Content>
+                                <Icon name='info circle'/>
+                                Prerequisite
+                            </Header.Content>
+                        </Header>
+                    ) }
+                    content={ (
+                        <Text>
+                            <Divider clearing />
+                            You will need to have <strong>Node.js</strong> and <strong>npm</strong> installed on
+                            your environment to try out the SDK.
+
+                            To download the Long Term Support (LTS) version of <strong>Node.js </strong>
+                            (which includes <strong>npm</strong>), navigate to the official <a
+                            href="https://nodejs.org/en/download/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="link external"
+                        >downloads</a> page.
+                        </Text>
+                    ) }
+                />
                 {
                     technology === SupportedSPATechnologyTypes.ANGULAR && (
                         <Text>

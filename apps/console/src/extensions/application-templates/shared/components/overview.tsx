@@ -32,6 +32,7 @@ interface QuickStartPanelOverviewPropsInterface extends TestableComponentInterfa
     handleIntegrateSelection?: (selection: string) => void;
     onBackButtonClick?: () => void;
     technology: string;
+    sele
     technologyLogo: GenericIconProps["icon"];
 }
 

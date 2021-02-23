@@ -14,7 +14,7 @@ import { CodeEditor, GenericIcon, Heading, Text } from "@wso2is/react-components
 import isEmpty from "lodash/isEmpty";
 import React, {ChangeEvent, FunctionComponent, ReactElement, ReactNode, useEffect, useState} from "react";
 import { useDispatch } from "react-redux";
-import {Button, Divider, Form, Icon, InputOnChangeData, Message} from "semantic-ui-react";
+import { Button, Divider, Form, Icon, InputOnChangeData, Header, Message } from "semantic-ui-react";
 import { dotNetSDKInstallerConfigCode, tomcatOIDCSamplePropertiesFileCode } from "./code-blocks";
 import { SDKMeta } from "./meta";
 import { SupportedTraditionalOIDCAppTechnologyTypes } from "./models";
@@ -328,7 +328,7 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                                             onClick={
                                                 () => handleAddCallback([sampleServerHost +
                                                     SDKMeta.tomcatOIDCAgent.sample.sigInRedirectURL,
-                                                    sampleServerHost + SDKMeta.tomcatOIDCAgent.sample.home],
+                                                        sampleServerHost + SDKMeta.tomcatOIDCAgent.sample.home],
                                                     sampleServerHost)
                                             }
                                         >
@@ -474,6 +474,7 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
             if (technology === SupportedTraditionalOIDCAppTechnologyTypes.JAVA_EE) {
                 return (
                     <>
+                        <Divider clearing />
                         <Text>
                             You will need to have <strong>Apache Tomcat 8.x or higher</strong> installed on
                             your environment to try out the sample.
@@ -512,8 +513,18 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
 
         return (
             <div className="mt-3 mb-6">
-                <Heading as="h3">Prerequisite</Heading>
-                { generateContent() }
+                <Message
+                    info
+                    header={ (
+                        <Header as='h3'>
+                            <Header.Content>
+                                <Icon name='info circle'/>
+                                Prerequisite
+                            </Header.Content>
+                        </Header>
+                    ) }
+                    content={ generateContent() }
+                />
             </div>
         );
     };
