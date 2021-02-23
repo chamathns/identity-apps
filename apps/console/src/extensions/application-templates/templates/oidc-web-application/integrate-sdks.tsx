@@ -16,7 +16,17 @@ import { CodeEditor, Heading, Text, GenericIcon, Hint } from "@wso2is/react-comp
 import isEmpty from "lodash/isEmpty";
 import React, { ChangeEvent, FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Divider, DropdownItemProps, Form, Icon, InputOnChangeData, List, Message } from "semantic-ui-react";
+import {
+    Button,
+    Divider,
+    DropdownItemProps,
+    Form,
+    Header,
+    Icon,
+    InputOnChangeData,
+    List,
+    Message
+} from "semantic-ui-react";
 import {
     dotNetSDKConfigCode,
     dotNetSDKLoginCode,
@@ -688,26 +698,23 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
             if (technology === SupportedTraditionalOIDCAppTechnologyTypes.JAVA_EE) {
                 return (
                     <>
-                        <Message
-                            icon="info circle"
-                            content={ (
-                                <p>
-                                    In this section, we guide you on how to configure your own Java application that
-                                    uses <strong>Apache Maven</strong> (3.6.x or higher) as the package manager
-                                    and <GenericIcon
-                                        transparent
-                                        icon={ TomcatLogo }
-                                        size="micro"
-                                        style={ {
-                                            "display": "inline",
-                                            "vertical-align": "sub"
-                                        } }
-                                    /> <strong>Apache Tomcat</strong> (8.x or higher) as the deployment engine. You may 
-                                    need to adjust some of the steps if you&apos;re working with a different application 
-                                    container or technology.
-                                </p>
-                            ) }
-                        />
+                        <Divider clearing />
+                        <p>
+                            In this section, we guide you on how to configure your own Java application that
+                            uses <strong>Apache Maven</strong> (3.6.x or higher) as the package manager
+                            and <GenericIcon
+                                transparent
+                                icon={ TomcatLogo }
+                                size="micro"
+                                style={ {
+                                    "display": "inline",
+                                    "vertical-align": "sub"
+                                } }
+                            /> <strong>Apache Tomcat</strong> (8.x or higher) as the deployment engine. You may
+                            need to adjust some of the steps if you&apos;re working with a different application
+                            container or technology.
+                        </p>
+
                         <Text>To download the latest <strong>Apache Maven</strong>, navigate to the official <a
                             href="https://maven.apache.org/download.cgi"
                             target="_blank"
@@ -747,8 +754,18 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
 
         return (
             <div className="mt-3 mb-6">
-                <Heading as="h3">Prerequisite</Heading>
-                { generateContent() }
+                <Message
+                    info
+                    header={ (
+                        <Header as='h3'>
+                            <Header.Content>
+                                <Icon name='info circle'/>
+                                Prerequisite
+                            </Header.Content>
+                        </Header>
+                    ) }
+                    content={ generateContent() }
+                />
             </div>
         );
     };

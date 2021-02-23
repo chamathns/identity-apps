@@ -11,7 +11,7 @@ import { TestableComponentInterface } from "@wso2is/core/models";
 import { EncodeDecodeUtils } from "@wso2is/core/utils";
 import { CodeEditor, Heading, Text, Code } from "@wso2is/react-components";
 import React, { FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
-import { Divider, DropdownItemProps, Form, Icon } from "semantic-ui-react";
+import {Divider, DropdownItemProps, Form, Header, Icon, Message} from "semantic-ui-react";
 import {
     angularSDKInitialisationCode,
     angularSDKIntegrationCode, javascriptSDKInitialisationCode,
@@ -549,19 +549,32 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
 
         return (
             <div className="mt-3 mb-6">
-                <Heading as="h3">Prerequisite</Heading>
-                <Text>
-                    You will need to have <strong>Node.js</strong> and <strong>npm</strong> installed on
-                    your environment to try out the SDK.
-                </Text>
-                <Text>To download the Long Term Support (LTS) version of <strong>Node.js </strong>
-                    (which includes <strong>npm</strong>), navigate to the official <a
-                        href="https://nodejs.org/en/download/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link external"
-                    >downloads</a> page.
-                </Text>
+                <Message
+                    info
+                    header={ (
+                        <Header as='h3'>
+                            <Header.Content>
+                                <Icon name='info circle'/>
+                                Prerequisite
+                            </Header.Content>
+                        </Header>
+                    ) }
+                    content={ (
+                        <Text>
+                            <Divider clearing />
+                            You will need to have <strong>Node.js</strong> and <strong>npm</strong> installed on
+                            your environment to try out the SDK.
+
+                            To download the Long Term Support (LTS) version of <strong>Node.js </strong>
+                            (which includes <strong>npm</strong>), navigate to the official <a
+                            href="https://nodejs.org/en/download/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="link external"
+                            >downloads</a> page.
+                        </Text>
+                    ) }
+                />
                 {
                     technology === SupportedSPATechnologyTypes.ANGULAR && (
                         <Text>
