@@ -10,7 +10,7 @@
 import { TestableComponentInterface } from "@wso2is/core/models";
 import { Code } from "@wso2is/react-components";
 import React, { FunctionComponent, ReactElement } from "react";
-import { Popup, Table } from "semantic-ui-react";
+import {Divider, Popup, Table} from "semantic-ui-react";
 
 export interface SubjectAttributeListItemPropInterface extends TestableComponentInterface {
     key: string;
