@@ -1,0 +1,12 @@
+/*******************************
+        Product Overrides
+*******************************/
+
+.product-title {
+    .product-title-main {
+        display: flex;
+    }
+    .product-title-text {
+        margin-top: 2px !important;
+    }
+}
