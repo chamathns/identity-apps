@@ -152,22 +152,26 @@ export const EditApplication: FunctionComponent<EditApplicationPropsInterface> =
     ] = useState<{ clientSecret: string; clientId: string }>({ clientId: "", clientSecret: "" });
 
     /**
-     * Load SAML configs if the inbound protocal is SAML
+     * TODO : Revisit the saml metadata request error.
+     * tracked with {@link https://github.com/wso2-enterprise/asgardeo-product/issues/2406}
      */
-    useEffect(() => {
-        if (samlConfigurations !== undefined ||
-            (application?.inboundProtocols && application?.inboundProtocols.length > 0 &&
-                application?.inboundProtocols[ 0 ]?.type !== "samlsso")) {
-            return;
-        }
-
-        setIsInboundProtocolConfigRequestLoading(true);
-
-        ApplicationManagementUtils.getSAMLApplicationMeta()
-            .finally(() => {
-                setIsInboundProtocolConfigRequestLoading(false);
-            });
-    }, [ samlConfigurations ]);
+    // /**
+    //  * Load SAML configs if the inbound protocal is SAML
+    //  */
+    // useEffect(() => {
+    //     if (samlConfigurations !== undefined ||
+    //         (application?.inboundProtocols && application?.inboundProtocols.length > 0 &&
+    //             application?.inboundProtocols[ 0 ]?.type !== "samlsso")) {
+    //         return;
+    //     }
+    //
+    //     setIsInboundProtocolConfigRequestLoading(true);
+    //
+    //     ApplicationManagementUtils.getSAMLApplicationMeta()
+    //         .finally(() => {
+    //             setIsInboundProtocolConfigRequestLoading(false);
+    //         });
+    // }, [ samlConfigurations ]);
 
     /**
      * Fetch the allowed origins list whenever there's an update.
