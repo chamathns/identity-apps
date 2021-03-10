@@ -319,6 +319,9 @@ TODO : Move values to seperate variables and cleanup styles.
         background-color: lighten(@primaryColor, 40) !important;
         border: 1px solid @primaryColor !important;
     }
+    &.disabled {
+        cursor: not-allowed !important;
+    }
 }
 
 .code-segment {

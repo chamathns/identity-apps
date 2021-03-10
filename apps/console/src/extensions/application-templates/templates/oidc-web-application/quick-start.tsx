@@ -20,6 +20,7 @@ import {
 } from "../../../../features/applications/models";
 import { getTechnologyLogos } from "../../../../features/core/configs";
 import JavaLogo from "../../../assets/images/icons/java-logo.svg";
+import DotNetLogo from "../../../../themes/default/assets/images/technologies/dotnet-logo.svg";
 import { QuickStartModes } from "../../shared";
 import { QuickStartPanelOverview, TechnologySelection } from "../../shared/components";
 import { getApplicationList } from "../../../../features/applications/api";
@@ -164,6 +165,12 @@ const TraditionalOIDCWebApplicationQuickStart: FunctionComponent<
                                             displayName: SupportedTraditionalOIDCAppTechnologyTypes.JAVA_EE,
                                             logo: JavaLogo,
                                             type: SupportedTraditionalOIDCAppTechnologyTypes.JAVA_EE
+                                        },
+                                        {
+                                            displayName: SupportedTraditionalOIDCAppTechnologyTypes.DOT_NET,
+                                            logo: DotNetLogo,
+                                            type: SupportedTraditionalOIDCAppTechnologyTypes.DOT_NET,
+                                            disabled: true
                                         }
                                     ] }
                                     onSelectedTechnologyChange={

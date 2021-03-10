@@ -8,11 +8,12 @@
  */
 
 import { TestableComponentInterface } from "@wso2is/core/models";
-import { GenericIcon, GenericIconProps, Heading, Text } from "@wso2is/react-components";
+import { GenericIconProps, Heading, TechnologyCard, Text } from "@wso2is/react-components";
 import isEmpty from "lodash/isEmpty";
 import kebabCase from "lodash/kebabCase";
-import React, { ReactElement, ReactNode } from "react";
-import { Card, Divider } from "semantic-ui-react";
+import React, { ReactElement, ReactNode, useState } from "react";
+import { Card, Divider} from "semantic-ui-react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Proptypes for the Technology Selection component.
@@ -27,6 +28,7 @@ interface TechnologyInterface<T> extends TestableComponentInterface {
     type: T;
     logo: ReactNode | GenericIconProps;
     displayName: string;
+    disabled?: boolean;
 }
 
 /**
@@ -65,28 +67,19 @@ export const TechnologySelection: <T>(props: TechnologySelectionPropsInterface<T
                     >
                         {
                             technologies.map((technology: TechnologyInterface<T>, index: number) => (
-                                <Card
+                                <TechnologyCard
                                     key={ index }
                                     raised={ false }
                                     data-testid={
                                         technology[ "data-testid" ]
-                                            ?? `technology-card-${ kebabCase(technology.displayName) }`
+                                        ?? `technology-card-${ kebabCase(technology.displayName) }`
                                     }
-                                    className="basic-card tech-selection"
                                     onClick={ () => onSelectedTechnologyChange(technology.type) }
-                                >
-                                    <Card.Content textAlign="center">
-                                        <GenericIcon
-                                            transparent
-                                            size="x50"
-                                            className="mb-2"
-                                            icon={ technology.logo }
-                                        />
-                                        <Card.Description>
-                                            { technology.displayName }
-                                        </Card.Description>
-                                    </Card.Content>
-                                </Card>
+                                    displayName={ technology.displayName }
+                                    disabled={ technology.disabled }
+                                    overlayOpacity={ 0.6 }
+                                    image={ technology.logo }
+                                />
                             ))
                         }
                     </Card.Group>
