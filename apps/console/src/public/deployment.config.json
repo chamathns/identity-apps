@@ -4,7 +4,7 @@
         "skipTenant": true,
         "useCommonPostLogoutUrl" : true
     },
-    "appBaseName": "",
+    "appBaseName": "console",
     "appBaseNameForHistoryAPI": "/",
     "clientID": "CONSOLE",
     "debug": false,
@@ -47,7 +47,7 @@
     "productVersion": "",
     "serverOrigin": "https://localhost:9443",
     "routePaths": {
-        "home": "/develop/applications",
+        "home": "/develop/getting-started",
         "login": "/login",
         "logout": "/logout"
     },
@@ -59,8 +59,8 @@
     },
     "tenantResolutionStrategy": "id_token",
     "ui": {
-        "appCopyright": "WSO2 Identity Server ${copyright} ${year}",
-        "appTitle": "Console | WSO2 Identity Server",
+        "appCopyright": "${copyright} ${year} WSO2",
+        "appTitle": "Asgardeo Console",
         "appName": "Console",
         "applicationTemplateLoadingStrategy": "LOCAL",
         "identityProviderTemplateLoadingStrategy": "LOCAL",
