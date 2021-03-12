@@ -1,0 +1,17 @@
+/*******************************
+        Menu Variables
+*******************************/
+
+/*-------------------
+      App Header
+--------------------*/
+
+@appHeaderBackground: @asgardeoBlack;
+@appHeaderHamburgerIconColor: @galleryGray;
+@appHeaderBorderBottom: 1px solid #c9c9c9;
+
+/*-------------------
+    User Dropdown
+--------------------*/
+
+@userDropdownTriggerTextColor: @galleryGray;
