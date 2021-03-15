@@ -623,3 +623,14 @@ export enum DefaultTemplateGroupIds {
     DESKTOP_APPLICATION = "desktop",
     MOBILE_APPLICATION = "mobile"
 }
+
+/**
+ * Enum for application step sequence modes.
+ *
+ * @readonly
+ * @enum {string}
+ */
+export enum ApplicationStepSequenceModes {
+    INTEGRATE = "INTEGRATE",
+    SAMPLES = "SAMPLES"
+}

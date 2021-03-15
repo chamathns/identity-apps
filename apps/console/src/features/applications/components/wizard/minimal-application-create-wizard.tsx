@@ -38,7 +38,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dimmer, Grid, Popup } from "semantic-ui-react";
 import { OauthProtocolSettingsWizardForm } from "./oauth-protocol-settings-wizard-form";
 import { SAMLProtocolSettingsWizardForm } from "./saml-protocol-settings-wizard-form";
-import { ApplicationListInterface, ApplicationTemplateLoadingStrategies, getApplicationList } from "../..";
+import {
+    ApplicationListInterface,
+    ApplicationTemplateLoadingStrategies,
+    CertificateTypeInterface,
+    getApplicationList
+} from "../..";
 import {
     AppConstants,
     AppState,
@@ -54,7 +59,12 @@ import { getInboundProtocolLogos } from "../../configs";
 import { ApplicationManagementConstants } from "../../constants";
 import CustomApplicationTemplate
     from "../../data/application-templates/templates/custom-application/custom-application.json";
-import { ApplicationTemplateInterface, MainApplicationInterface, SupportedAuthProtocolTypes } from "../../models";
+import {
+    ApplicationStepSequenceModes,
+    ApplicationTemplateInterface,
+    MainApplicationInterface,
+    SupportedAuthProtocolTypes
+} from "../../models";
 
 /**
  * Prop types of the `MinimalAppCreateWizard` component.
@@ -69,6 +79,7 @@ interface MinimalApplicationCreateWizardPropsInterface extends TestableComponent
     subTemplates?: ApplicationTemplateInterface[];
     subTemplatesSectionTitle?: string;
     appId?: string;
+    applicationStepSequenceMode?: string;
     /**
      * Callback to update the application details.
      */
@@ -94,6 +105,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
 
     const {
         title,
+        applicationStepSequenceMode,
         closeWizard,
         template,
         showHelpPanel,
@@ -121,6 +133,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
     const [ generalFormValues, setGeneralFormValues ] = useState<Map<string, FormValue>>(undefined);
     const [ selectedTemplate, setSelectedTemplate ] = useState<ApplicationTemplateInterface>(template);
     const [ allowedOrigins, setAllowedOrigins ] = useState([]);
+    const [ isIntegrateMode, setIntegrateMode ] = useState<boolean>(false);
 
     const [ alert, setAlert, notification ] = useWizardAlert();
 
@@ -362,6 +375,14 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
         }
     };
 
+        const resolveMinimalProtocolSamples = (): ReactElement => {
+            return (
+                <div>
+                    Empty
+                </div>
+            );
+    };
+
     const renderDimmerOverlay = ( ): ReactNode => {
 
         return (
@@ -369,7 +390,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
                 { t("common:featureAvailable" ) }
             </Dimmer>
         );
-    }
+    };
 
     const scrollToNotification = () => {
         document.getElementById("notification-div").scrollIntoView({ behavior: "smooth" });
@@ -472,8 +493,38 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
                             />
                         </Grid.Column>
                     </Grid.Row>
+
+                    <Field
+                        label={
+                            "I want to"
+                        }
+                        name="applicationStepSequence"
+                        default={ ApplicationStepSequenceModes.SAMPLES }
+                        listen={
+                            (values) => {
+                                setIntegrateMode(values.get("applicationStepSequence") ===
+                                    ApplicationStepSequenceModes.INTEGRATE);
+                            }
+                        }
+                        type="radio"
+                        value={ applicationStepSequenceMode }
+                        children={ [
+                            {
+                                label: "Integrate with my app",
+                                value: ApplicationStepSequenceModes.INTEGRATE
+                            },
+                            {
+                                label: "Explore a sample",
+                                value: ApplicationStepSequenceModes.SAMPLES
+                            }
+                        ] }
+                        readOnly={ false }
+                        data-testid={ `${ testId }-certificate-type-radio-group` }
+                    />
+
                     {
-                        (subTemplates && subTemplates instanceof Array && subTemplates.length > 0)
+                        isIntegrateMode ?
+                            ((subTemplates && subTemplates instanceof Array && subTemplates.length > 0)
                             ? (
                                 <Grid.Row className="pt-0">
                                     <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
@@ -515,16 +566,26 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
                                                 ))
                                             }
                                         </div>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            )
-                            : null
+                                </Grid.Column>
+                                <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
+                                    { resolveMinimalProtocolFormFields() }
+                                </Grid.Column>
+                            </Grid.Row>
+                            ) : null
+                            ) :
+                            <Grid.Row className="pt-0">
+                                <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
+                                    { resolveMinimalProtocolSamples() }
+                                </Grid.Column>
+                            </Grid.Row>
                     }
-                    <Grid.Row className="pt-0">
-                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
-                            { resolveMinimalProtocolFormFields() }
-                        </Grid.Column>
-                    </Grid.Row>
+
+
+                    { /*<Grid.Row className="pt-0">*/ }
+                    { /*    <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>*/ }
+                    { /*        { resolveMinimalProtocolFormFields() }*/ }
+                    { /*    </Grid.Column>*/ }
+                    { /*</Grid.Row>*/ }
                 </Grid>
             </Forms>
         );
