@@ -43,6 +43,10 @@ import {
  */
 interface OAuthProtocolSettingsWizardFormPropsInterface extends TestableComponentInterface {
     /**
+     * Application mode.
+     */
+    applicationMode?: string;
+    /**
      * Set of fields to be displayed.
      */
     fields?: ("callbackURLs" | "publicClient" | "RefreshToken")[];
@@ -102,6 +106,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
 ): ReactElement => {
 
     const {
+        applicationMode,
         selectedTemplate,
         isProtocolConfig,
         allowedOrigins,
@@ -130,6 +135,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
     const [ selectedGrantTypes, setSelectedGrantTypes ] = useState<string[]>(undefined);
     const [ isGrantChanged, setGrantChanged ] = useState<boolean>(false);
     const [ showGrantTypes, setShowGrantTypes ] = useState<boolean>(false);
+    const [ isIntegrateMode, setIntegrateMode ] = useState<boolean>(true);
     const config: ConfigReducerStateInterface = useSelector((state: AppState) => state.config);
 
     // Maintain the state if the user allowed the CORS for the
@@ -217,6 +223,14 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
             setShowRefreshToken(true);
         }
     }, [ templateValues, selectedTemplate ]);
+
+    useEffect( () => {
+        if (applicationMode === "SAMPLES") {
+            setIntegrateMode(false);
+            return;
+        }
+        setIntegrateMode(true);
+    }, [ applicationMode ]);
 
     /**
      * Add regexp to multiple callbackUrls and update configs.
@@ -444,9 +458,16 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
                                                 "spaProtocolSettingsWizard.fields.callBackUrls.label")
                                         }
                                         placeholder={
-                                            t("console:develop.features.applications.forms.inboundOIDC." +
-                                                "fields.callBackUrls" +
-                                                ".placeholder")
+                                            isIntegrateMode ?
+                                                (
+                                                    "https://myapp.io/login"
+                                                ) : (
+                                                    callBackURLFromTemplate ? (
+                                                        "https://localhost:5000"
+                                                    ):(
+                                                        "https://<TOMCAT_HOST>:<TOMCAT_PORT>/oidc-sample-app/oauth2client"
+                                                    )
+                                                )
                                         }
                                         validationErrorMsg={
                                             t("console:develop.features.applications.forms." +
@@ -490,38 +511,67 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
                                         customLabel={ callbackURLsErrorLabel }
                                     />
                                     {
-                                        (callBackURLFromTemplate) && (
-                                            <Message className="with-inline-icon" icon visible info>
-                                                <Icon name="info" size="mini" />
-                                                <Message.Content> {
-                                                    <Trans
-                                                    i18nKey={ "console:develop.features.applications.forms." +
-                                                        "inboundOIDC.fields.callBackUrls.info" }
-                                                    tOptions={ { callBackURLFromTemplate: callBackURLFromTemplate  } }
-                                                    >
-                                                        Don’t have an app? Try out a sample app
-                                                        using <strong>{ callBackURLFromTemplate }</strong> as the Authorized URL.
-                                                    </Trans>
-                                                }
-                                                    {
-                                                        (callBackUrls === undefined || callBackUrls === "") && (
-                                                            <LinkButton
-                                                                className={ "m-1 p-1 with-no-border orange" }
-                                                                onClick={ (e) => {
-                                                                    e.preventDefault();
-                                                                    const host = new URL(callBackURLFromTemplate);
-                                                                    handleAddAllowOrigin(host.origin);
-                                                                    setCallBackUrls(callBackURLFromTemplate);
-                                                                } }
-                                                                data-testid={ `${ testId }-add-now-button` }
-                                                            >
-                                                                <span style={ { fontWeight: "bold" } }>Add Now</span>
-                                                            </LinkButton>
-                                                        )
+                                        !isIntegrateMode ? (
+                                            (callBackURLFromTemplate) ? (
+                                                <Message className="with-inline-icon" icon visible info>
+                                                    <Icon name="info" size="mini" />
+                                                    <Message.Content> {
+                                                        // <Trans
+                                                        // i18nKey={ "console:develop.features.applications.forms." +
+                                                        //     "inboundOIDC.fields.callBackUrls.info" }
+                                                        // tOptions={ { callBackURLFromTemplate: callBackURLFromTemplate  } }
+                                                        // >
+                                                        //     Try out a sample app
+                                                        //     using <strong>{ callBackURLFromTemplate }</strong> as the Authorized URL.
+                                                        // </Trans>
+                                                        <p>
+                                                            Try out a sample app using <strong>https://localhost:5000
+                                                        </strong> as the Authorized URL. You can download the samples
+                                                            from the quick start menu.
+                                                        </p>
+
                                                     }
-                                                </Message.Content>
-                                            </Message>
-                                        )
+                                                        {
+                                                            (callBackUrls === undefined || callBackUrls === "") && (
+                                                                <LinkButton
+                                                                    className={ "m-1 p-1 with-no-border orange" }
+                                                                    onClick={ (e) => {
+                                                                        e.preventDefault();
+                                                                        const host = new URL(callBackURLFromTemplate);
+                                                                        handleAddAllowOrigin(host.origin);
+                                                                        setCallBackUrls(callBackURLFromTemplate);
+                                                                    } }
+                                                                    data-testid={ `${ testId }-add-now-button` }
+                                                                >
+                                                                    <span style={ { fontWeight: "bold" } }>Add Now</span>
+                                                                </LinkButton>
+                                                            )
+                                                        }
+                                                    </Message.Content>
+                                                </Message>
+                                            ) : (
+                                                <Message className="with-inline-icon" icon visible info>
+                                                    <Icon name="info" size="mini" />
+                                                    <Message.Content> {
+                                                        // <Trans
+                                                        // i18nKey={ "console:develop.features.applications.forms." +
+                                                        //     "inboundOIDC.fields.callBackUrls.info" }
+                                                        // tOptions={ { callBackURLFromTemplate: callBackURLFromTemplate  } }
+                                                        // >
+                                                        //     Try out a sample app
+                                                        //     using <strong>{ callBackURLFromTemplate }</strong> as the Authorized URL.
+                                                        // </Trans>
+                                                        <p>
+                                                            Try out a sample app using <code>
+                                                            https://&lt;TOMCAT_HOST&gt;:&lt;TOMCAT_PORT&gt;/oidc-sample-app/oauth2client
+                                                        </code> as the Authorized URL. You can download the samples from
+                                                            the quick start menu.
+                                                        </p>
+                                                    }
+                                                    </Message.Content>
+                                                </Message>
+                                            )
+                                            ) : null
                                     }
                                 </Grid.Column>
                             </Grid.Row>
@@ -599,6 +649,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
  */
 OauthProtocolSettingsWizardForm.defaultProps = {
     "data-testid": "oauth-protocol-settings-wizard-form",
+    applicationMode: "INTEGRATE",
     hideFieldHints: false,
     showCallbackURL: false
 };
