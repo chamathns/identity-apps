@@ -2406,6 +2406,11 @@ export const console: ConsoleNS = {
                         help: {
                             heading: "Aide",
                             subHeading: "Utilisez les descriptions ci-dessous pour vous guider"
+                        },
+                        applicationMode: {
+                            label: "Select one of the following paths.",
+                            integrate: "Integrate with your app",
+                            sample: "Explore a sample"
                         }
                     }
                 }

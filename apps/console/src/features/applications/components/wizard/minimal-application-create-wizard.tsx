@@ -25,20 +25,27 @@ import {
     LinkButton,
     PrimaryButton,
     SelectionCard,
+    TechnologyCard,
     useWizardAlert
 } from "@wso2is/react-components";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
+import kebabCase from "lodash/kebabCase";
 import merge from "lodash/merge";
 import set from "lodash/set";
 import React, { FunctionComponent, ReactElement, ReactNode, Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Dimmer, Grid, Popup } from "semantic-ui-react";
+import { Card, Dimmer, Grid, Popup } from "semantic-ui-react";
 import { OauthProtocolSettingsWizardForm } from "./oauth-protocol-settings-wizard-form";
 import { SAMLProtocolSettingsWizardForm } from "./saml-protocol-settings-wizard-form";
-import { ApplicationListInterface, ApplicationTemplateLoadingStrategies, getApplicationList } from "../..";
+import {
+    ApplicationListInterface,
+    ApplicationTemplateLoadingStrategies,
+    CertificateTypeInterface,
+    getApplicationList
+} from "../..";
 import {
     AppConstants,
     AppState,
@@ -54,7 +61,12 @@ import { getInboundProtocolLogos } from "../../configs";
 import { ApplicationManagementConstants } from "../../constants";
 import CustomApplicationTemplate
     from "../../data/application-templates/templates/custom-application/custom-application.json";
-import { ApplicationTemplateInterface, MainApplicationInterface, SupportedAuthProtocolTypes } from "../../models";
+import {
+    ApplicationSetupModes,
+    ApplicationTemplateInterface,
+    MainApplicationInterface,
+    SupportedAuthProtocolTypes
+} from "../../models";
 
 /**
  * Prop types of the `MinimalAppCreateWizard` component.
@@ -69,6 +81,7 @@ interface MinimalApplicationCreateWizardPropsInterface extends TestableComponent
     subTemplates?: ApplicationTemplateInterface[];
     subTemplatesSectionTitle?: string;
     appId?: string;
+    applicationStepSequenceMode?: string;
     /**
      * Callback to update the application details.
      */
@@ -94,6 +107,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
 
     const {
         title,
+        applicationStepSequenceMode,
         closeWizard,
         template,
         showHelpPanel,
@@ -121,6 +135,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
     const [ generalFormValues, setGeneralFormValues ] = useState<Map<string, FormValue>>(undefined);
     const [ selectedTemplate, setSelectedTemplate ] = useState<ApplicationTemplateInterface>(template);
     const [ allowedOrigins, setAllowedOrigins ] = useState([]);
+    const [ isIntegrateMode, setIntegrateMode ] = useState<boolean>(true);
 
     const [ alert, setAlert, notification ] = useWizardAlert();
 
@@ -332,16 +347,18 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
      *
      * @return {any}
      */
-    const resolveMinimalProtocolFormFields = (): ReactElement => {
+    const resolveMinimalProtocolFormFields = (applicationMode: string): ReactElement => {
         if (selectedTemplate.authenticationProtocol === SupportedAuthProtocolTypes.OIDC) {
             return (
                 <OauthProtocolSettingsWizardForm
+                    applicationMode={ applicationMode }
                     isProtocolConfig={ false }
                     tenantDomain={ tenantName }
                     allowedOrigins={ allowedOrigins }
                     fields={ [ "callbackURLs" ] }
                     hideFieldHints={ true }
                     triggerSubmit={ submitProtocolForm }
+                    templateId={ templateSettings?.id }
                     templateValues={ templateSettings?.application }
                     onSubmit={ (values): void => setProtocolFormValues(values) }
                     showCallbackURL={ true }
@@ -369,7 +386,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
                 { t("common:featureAvailable" ) }
             </Dimmer>
         );
-    }
+    };
 
     const scrollToNotification = () => {
         document.getElementById("notification-div").scrollIntoView({ behavior: "smooth" });
@@ -472,8 +489,9 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
                             />
                         </Grid.Column>
                     </Grid.Row>
+
                     {
-                        (subTemplates && subTemplates instanceof Array && subTemplates.length > 0)
+                            (subTemplates && subTemplates instanceof Array && subTemplates.length > 0)
                             ? (
                                 <Grid.Row className="pt-0">
                                     <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
@@ -515,16 +533,55 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
                                                 ))
                                             }
                                         </div>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            )
-                            : null
+                                </Grid.Column>
+                            </Grid.Row>
+                            ) : null
                     }
-                    <Grid.Row className="pt-0">
-                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
-                            { resolveMinimalProtocolFormFields() }
-                        </Grid.Column>
-                    </Grid.Row>
+
+                    <Field
+                        label={
+                            "I want to"
+                        }
+                        name="applicationSetupMode"
+                        default={ ApplicationSetupModes.INTEGRATE }
+                        listen={
+                            (values) => {
+                                if (values.get("applicationSetupMode") === ApplicationSetupModes.INTEGRATE) {
+                                    setIntegrateMode(true);
+                                } else {
+                                    setIntegrateMode(false);
+                                }
+                            }
+                        }
+                        type="radio"
+                        value={ applicationStepSequenceMode }
+                        children={ [
+                            {
+                                label: "Integrate with my app",
+                                value: ApplicationSetupModes.INTEGRATE
+                            },
+                            {
+                                label: "Explore a sample",
+                                value: ApplicationSetupModes.SAMPLES
+                            }
+                        ] }
+                        readOnly={ false }
+                        data-testid={ `${ testId }-certificate-type-radio-group` }
+                    />
+                    {  isIntegrateMode ? (
+                        <Grid.Row className="pt-0">
+                            <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
+                                { resolveMinimalProtocolFormFields(ApplicationSetupModes.INTEGRATE) }
+                            </Grid.Column>
+                        </Grid.Row>
+                    ) : (
+                        <Grid.Row className="pt-0">
+                            <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 14 }>
+                                { resolveMinimalProtocolFormFields(ApplicationSetupModes.SAMPLES) }
+                            </Grid.Column>
+                        </Grid.Row>
+                    )
+                    }
                 </Grid>
             </Forms>
         );

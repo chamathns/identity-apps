@@ -2380,6 +2380,11 @@ export const console: ConsoleNS = {
                         help: {
                             heading: "උදව්",
                             subHeading: "මඟ පෙන්වීමක් ලෙස පහත සඳහන් දෑ භාවිතා කරන්න"
+                        },
+                        applicationMode: {
+                            label: "Select one of the following paths.",
+                            integrate: "Integrate with your app",
+                            sample: "Explore a sample"
                         }
                     }
                 }
