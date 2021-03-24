@@ -19,7 +19,7 @@
 import { TestableComponentInterface } from "@wso2is/core/models";
 import { URLUtils } from "@wso2is/core/utils";
 import { Field, FormValue, Forms } from "@wso2is/forms";
-import { ContentLoader, Hint, URLInput, LinkButton } from "@wso2is/react-components";
+import { ContentLoader, Hint, LinkButton, URLInput } from "@wso2is/react-components";
 import intersection from "lodash/intersection";
 import isEmpty from "lodash/isEmpty";
 import React, { FunctionComponent, ReactElement, useEffect, useState } from "react";
@@ -120,6 +120,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
 
     const [ callBackUrls, setCallBackUrls ] = useState("");
     const [ callBackURLFromTemplate, setCallBackURLFromTemplate ] = useState("");
+    const [ allowedOriginsFromTemplate, setAllowedOriginsFromTemplate ] = useState<string[]>([]);
     const [ publicClient, setPublicClient ] = useState<string[]>([]);
     const [ refreshToken, setRefreshToken ] = useState<string[]>([]);
     const [ showRefreshToken, setShowRefreshToken ] = useState(false);
@@ -135,6 +136,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
     // Maintain the state if the user allowed the CORS for the
     // origin of the configured callback URL(s).
     const [ allowCORSUrls, setAllowCORSUrls ] = useState<string[]>(allowedOrigins ? allowedOrigins: []);
+    const [ allowedOriginUrls, setAllowedOriginUrls ] = useState<string[]>([]);
 
     /**
      * Show the grant types only for the custom protocol template.
@@ -186,10 +188,12 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
         }
 
         const templatedCallbacks: string[] = templateValues?.inboundProtocolConfiguration?.oidc?.callbackURLs;
+        const templatedAllowedOrigins: string[] = templateValues?.inboundProtocolConfiguration?.oidc?.allowedOrigins;
 
         if (templatedCallbacks && Array.isArray(templatedCallbacks) && templatedCallbacks.length > 0) {
             setCallBackURLFromTemplate(templatedCallbacks[ 0 ]);
         }
+        setAllowedOriginsFromTemplate(templatedAllowedOrigins);
     }, [ templateValues ]);
 
     useEffect(() => {
@@ -277,6 +281,20 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
             }
         }
     }, [ initialValues ]);
+    
+    const resolveAllowedOrigins = (urls: string): string[] => {
+            let calBackUrls: string[] = [];
+
+            if (urls?.split(",").length > 1) {
+                calBackUrls = urls?.split(",");
+            } else {
+                calBackUrls.push(urls);
+            }
+            const normalizedOrigins = calBackUrls?.map(
+                (url) => URLUtils.urlComponents(url)?.origin
+            );
+            return  normalizedOrigins.filter(value => allowCORSUrls.includes(value));
+    };
 
     /**
      * Sanitizes and prepares the form values for submission.
@@ -309,12 +327,15 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
         }
 
         if (showCallbackURLField && (showCallbackURL || !fields || fields.includes("callbackURLs"))) {
-            config.inboundProtocolConfiguration.oidc[ "allowedOrigins" ] = allowCORSUrls;
+
+            config.inboundProtocolConfiguration.oidc[ "allowedOrigins" ] = resolveAllowedOrigins( urls ? urls
+                : callBackUrls);
         }
 
         if (!showCallbackURLField && selectedGrantTypes) {
             config.inboundProtocolConfiguration.oidc[ "grantTypes" ] = selectedGrantTypes;
-            config.inboundProtocolConfiguration.oidc[ "allowedOrigins" ] = allowCORSUrls;
+            config.inboundProtocolConfiguration.oidc[ "allowedOrigins" ] = resolveAllowedOrigins( urls ? urls
+                : callBackUrls);
         }
 
         return config;
@@ -329,6 +350,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
         const allowedURLs = [ ...allowCORSUrls ];
         allowedURLs.splice(allowedURLs.indexOf(url), 1);
         setAllowCORSUrls(allowedURLs);
+        handleRemoveExistingAllowedOrigin(url);
     };
 
     /**
@@ -340,6 +362,19 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
         const allowedURLs = [ ...allowCORSUrls ];
         allowedURLs.push(url);
         setAllowCORSUrls(allowedURLs);
+        handleAddExistingAllowedOrigin(url);
+    };
+
+    const handleAddExistingAllowedOrigin = (url: string): void => {
+        const allowedOriginURLs = [ ...allowedOriginUrls ];
+        allowedOriginURLs.push(url);
+        setAllowedOriginUrls(allowedOriginURLs);
+    };
+
+    const handleRemoveExistingAllowedOrigin = (url: string): void => {
+        const allowedOriginURLs = [ ...allowedOriginUrls ];
+        allowedOriginURLs.splice(allowedOriginURLs.indexOf(url), 1);
+        setAllowedOriginUrls(allowedOriginURLs);
     };
 
     /**
@@ -434,6 +469,7 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
                                     <URLInput
                                         labelEnabled={ true }
                                         handleAddAllowedOrigin={ (url) => handleAddAllowOrigin(url) }
+                                        handleExistingAllowedOrigin={ (url) => handleAddExistingAllowedOrigin(url) }
                                         handleRemoveAllowedOrigin={ (url) => handleRemoveAllowOrigin(url) }
                                         tenantDomain={ tenantDomain }
                                         allowedOrigins={ allowCORSUrls }
@@ -509,8 +545,11 @@ export const OauthProtocolSettingsWizardForm: FunctionComponent<OAuthProtocolSet
                                                                 className={ "m-1 p-1 with-no-border orange" }
                                                                 onClick={ (e) => {
                                                                     e.preventDefault();
-                                                                    const host = new URL(callBackURLFromTemplate);
-                                                                    handleAddAllowOrigin(host.origin);
+                                                                    allowedOriginsFromTemplate?.forEach(
+                                                                        allowedOrigin => {
+                                                                            handleAddAllowOrigin(allowedOrigin);
+                                                                        }
+                                                                    );
                                                                     setCallBackUrls(callBackURLFromTemplate);
                                                                 } }
                                                                 data-testid={ `${ testId }-add-now-button` }

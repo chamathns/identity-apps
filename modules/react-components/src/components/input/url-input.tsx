@@ -77,6 +77,10 @@ export interface URLInputPropsInterface extends TestableComponentInterface {
      */
     handleAddAllowedOrigin?: (url: string) => void;
     /**
+     * Callback to add the allowed origin
+     */
+    handleExistingAllowedOrigin?: (url: string) => void;
+    /**
      * Callback to remove the allowed origin
      */
     handleRemoveAllowedOrigin?: (url: string) => void;
@@ -133,6 +137,7 @@ export const URLInput: FunctionComponent<URLInputPropsInterface> = (
         isAllowEnabled,
         allowedOrigins,
         handleAddAllowedOrigin,
+        handleExistingAllowedOrigin,
         handleRemoveAllowedOrigin,
         labelEnabled,
         showError,
@@ -196,7 +201,9 @@ export const URLInput: FunctionComponent<URLInputPropsInterface> = (
         if (urlValid && (urlState === "" || urlState === undefined)) {
             setURLState(url);
             setChangeUrl("");
-
+            if (isOriginIsKnownAndAllowed) {
+                handleExistingAllowedOrigin(url);
+            }
             return url;
         } else {
             const availableURls: string[] = !urlState ? [] : urlState?.split(",");
