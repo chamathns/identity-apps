@@ -9,7 +9,7 @@
 
 import { Heading } from "@wso2is/react-components";
 import React from "react";
-import { Divider } from "semantic-ui-react";
+import {Divider, Icon} from "semantic-ui-react";
 import { ApplicationConfig } from "./models";
 import {
     ExtendedClaimInterface,
@@ -18,6 +18,8 @@ import {
 } from "../../features/applications/components/settings";
 import { ClaimManagementConstants } from "../../features/claims";
 import { AddUserStepContent } from "../application-templates/shared/components";
+import {AppConstants} from "../../features/core/constants";
+import {UsersConstants} from "../components/users/constants";
 
 function isClaimInterface(
     claim: ExtendedClaimInterface | ExtendedExternalClaimInterface
@@ -82,7 +84,21 @@ export const applicationConfig: ApplicationConfig = {
                         </strong>
                     </Heading>
                     <div>
-                        <AddUserStepContent />
+                        <p>
+                            You will need a consumer user account to log in to the applications.
+                        </p>
+                        <p>
+                            { " " }
+                            Do not have a consumer user account?{ " " }<a
+                            onClick={ () => {
+                                window.open(AppConstants.getClientOrigin()
+                                    + UsersConstants.getPaths().get("USERS_PATH"),
+                                    "",
+                                    "noopener");
+                            } }
+                            className="external-link link pointing primary"
+                        >Create Account <Icon name="external"/></a>
+                        </p>
                     </div>
                 </>
             );
