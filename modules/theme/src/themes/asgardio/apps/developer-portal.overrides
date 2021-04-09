@@ -570,14 +570,6 @@ TODO : Move values to seperate variables and cleanup styles.
     }
 }
 
-.ui.grid {
-    &.form-container {
-        &.subject-attribute-selection {
-            max-width: @applicationSubjectSelectWidth;
-        }
-    }
-}
-
 .ui.card {
     &.selection-card {
         &.radio-selection-card {

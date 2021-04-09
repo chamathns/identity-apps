@@ -97,4 +97,4 @@
 
 @applicationListItemLineHeight: 1.4285em;
 @scriptBasedSignOnTemplateItemLineHeight: 1.1em;
-@applicationSubjectSelectWidth: 820px;
+
