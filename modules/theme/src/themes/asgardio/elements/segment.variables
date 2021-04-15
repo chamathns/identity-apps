@@ -101,8 +101,6 @@
 @emphasizedSegmentBackgroundColor: @lightPageBackground;
 @emphasizedSegmentBorder: @defaultBorderWidth solid @lightBorderColor;
 @emphasizedSegmentBorderRadius: @defaultBorderRadius;
-@emphasizedSegmentHeight: 600px;
-
 
 /*-----------------------------
       Clickable Segment

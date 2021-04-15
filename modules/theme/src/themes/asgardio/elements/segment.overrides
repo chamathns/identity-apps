@@ -574,10 +574,6 @@
         background: @emphasizedSegmentBackgroundColor;
         border: @emphasizedSegmentBorder;
         border-radius: @emphasizedSegmentBorderRadius;
-        &.with-max-height {
-            height: @emphasizedSegmentHeight;
-            overflow: auto;
-        }
     }
 }
 
