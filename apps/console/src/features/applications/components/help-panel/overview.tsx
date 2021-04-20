@@ -106,10 +106,13 @@ export const HelpPanelOverview: FunctionComponent<HelpPanelOverviewPropsInterfac
     //     if (samlConfigurations !== undefined) {
     //         return;
     //     }
+    //     handleMetadataLoading(true);
+    //     setSAMLConfigsLoading(true);
     //
     //     ApplicationManagementUtils.getSAMLApplicationMeta()
     //         .finally(() => {
     //             setSAMLConfigsLoading(false);
+    //             handleMetadataLoading(false);
     //         });
     // }, [ samlConfigurations ]);
 
