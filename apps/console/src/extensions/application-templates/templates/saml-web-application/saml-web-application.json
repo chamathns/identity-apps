@@ -44,7 +44,9 @@
                             "enabled": false
                         }
                     }
-                }
+                },
+                "allowedOrigins": [ "https://localhost:8080" ],
+                "assertionConsumerURLs": [ "http://localhost:8080/sample-app/home.jsp" ]
             }
         }
     }
