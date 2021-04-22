@@ -4,7 +4,7 @@
         "skipTenant": true,
         "useCommonPostLogoutUrl" : true
     },
-    "appBaseName": "console",
+    "appBaseName": "",
     "appBaseNameForHistoryAPI": "/",
     "clientID": "CONSOLE",
     "debug": false,
@@ -37,7 +37,7 @@
         "clockTolerance": 300,
         "responseMode": "query",
         "scope": [ "SYSTEM" ],
-        "serverOrigin": "https://localhost:9443",
+        "serverOrigin": "https://dev.accounts.asgardeo.io",
         "storage": "webWorker"
     },
     "i18nResourcePath": "",
@@ -45,7 +45,7 @@
     "loginCallbackPath": "/login",
     "logoutCallbackPath": "/login",
     "productVersion": "",
-    "serverOrigin": "https://localhost:9443",
+    "serverOrigin": "https://dev.accounts.asgardeo.io",
     "routePaths": {
         "home": "/develop/getting-started",
         "login": "/login",
