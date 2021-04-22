@@ -368,22 +368,28 @@ export const SAMLProtocolSettingsWizardForm: FunctionComponent<SAMLProtocolSetti
                                                 <Message.Content> {
                                                     <Trans
                                                         i18nKey={ "console:develop.features.applications.forms." +
-                                                        "inboundOIDC.fields.callBackUrls.info" }
-                                                        tOptions={ { callBackURLFromTemplate: assertionConsumerURLFromTemplate  } }
+                                                        "inboundSAML.fields.assertionURLs.info" }
+                                                        tOptions={ { assertionURLFromTemplate:
+                                                            assertionConsumerURLFromTemplate } }
                                                     >
                                                         Don’t have an app? Try out a sample app
-                                                        using <strong>{ assertionConsumerURLFromTemplate }</strong> as the Authorized URL.
+                                                        using <strong>{ assertionConsumerURLFromTemplate }</strong> as
+                                                        the assertion Response URL. (You can download and run a sample
+                                                        at a later step.)
                                                     </Trans>
                                                 }
                                                     {
-                                                        (assertionConsumerUrls === undefined || assertionConsumerUrls === "") && (
+                                                        (assertionConsumerUrls === undefined ||
+                                                            assertionConsumerUrls === "") && (
                                                             <LinkButton
                                                                 className={ "m-1 p-1 with-no-border orange" }
                                                                 onClick={ (e) => {
                                                                     e.preventDefault();
-                                                                    const host = new URL(assertionConsumerURLFromTemplate);
+                                                                    const host = new URL(
+                                                                        assertionConsumerURLFromTemplate);
                                                                     handleAddAllowOrigin(host.origin);
-                                                                    setAssertionConsumerUrls(assertionConsumerURLFromTemplate);
+                                                                    setAssertionConsumerUrls(
+                                                                        assertionConsumerURLFromTemplate);
                                                                 } }
                                                                 data-testid={ `${ testId }-add-now-button` }
                                                             >
