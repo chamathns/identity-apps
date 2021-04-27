@@ -187,9 +187,31 @@ export enum CertificateTypeInterface {
     PEM = "PEM"
 }
 
+/**
+ *  Application Configuration modes.
+ */
+export enum ApplicationConfigurationModeInterface {
+    MANUAL = "MANUAL",
+    METADATA_FILE = "METADATA_FILE",
+    METADATA_URL = "METADATA_URL"
+}
+
+/**
+ *  Acceptable metadata types.
+ */
+export enum MetadataTypeInterface {
+    FILE = "METADATA_FILE",
+    URL = "METADATA_URL"
+}
+
 export interface CertificateInterface {
     value?: string;
     type?: CertificateTypeInterface; // TODO  Check for upload option.
+}
+
+export interface ApplicationMetadataInterface {
+    value?: string;
+    type?: MetadataTypeInterface;
 }
 
 /**

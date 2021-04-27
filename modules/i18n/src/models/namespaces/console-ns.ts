@@ -732,6 +732,14 @@ export interface ConsoleNS {
                                     serviceIndex: FormAttributes;
                                 };
                             };
+                            configuration: {
+                                heading: string;
+                                types: FormAttributes;
+                                fields: {
+                                    metadataURL: FormAttributes;
+                                    metadataFile: FormAttributes;
+                                }
+                            }
                             encryption: {
                                 heading: string;
                                 fields: {

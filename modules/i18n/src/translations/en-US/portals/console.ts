@@ -17,6 +17,7 @@
  */
 
 import { ConsoleNS } from "../../../models";
+import {FormAttributes} from "../../../models/common";
 
 export const console: ConsoleNS = {
     common: {
@@ -1579,6 +1580,29 @@ export const console: ConsoleNS = {
                                     }
                                 },
                                 heading: "Attribute Profile"
+                            },
+                            configuration: {
+                                heading: "Configuration Mode",
+                                types: {
+                                    label: "Application configuration type",
+                                    manual: "Manual Configuration",
+                                    metadataFile: "Metadata File Configuration",
+                                    metadataURL: "URL Configuration"
+                                },
+                                fields: {
+                                    metadataURL: {
+                                        label: "URL",
+                                        placeholder: "https://myapp.io/meta/SAML",
+                                        description: "The URL used to obtain service provider metadata.",
+                                        validations: {
+                                            empty: "This is a required field.",
+                                            invalid: "Enter a valid URL"
+                                        }
+                                    },
+                                    metadataFile: {
+                                        label: "Metadata File"
+                                    }
+                                }
                             },
                             encryption: {
                                 fields: {

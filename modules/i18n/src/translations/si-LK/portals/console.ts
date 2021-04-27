@@ -1565,6 +1565,29 @@ export const console: ConsoleNS = {
                                 },
                                 heading: "ආරෝපණ පැතිකඩ"
                             },
+                            configuration: {
+                                heading: "Configuration Mode",
+                                types: {
+                                    label: "Application configuration type",
+                                    manual: "Manual Configuration",
+                                    metadataFile: "Metadata File Configuration",
+                                    metadataURL: "URL Configuration"
+                                },
+                                fields: {
+                                    metadataURL: {
+                                        label: "URL",
+                                        placeholder: "https://myapp.io/meta/SAML",
+                                        description: "The URL used to obtain service provider metadata.",
+                                        validations: {
+                                            empty: "This is a required field.",
+                                            invalid: "Enter a valid URL"
+                                        }
+                                    },
+                                    metadataFile: {
+                                        label: "Metadata File"
+                                    }
+                                }
+                            },
                             encryption: {
                                 fields: {
                                     assertionEncryption: {

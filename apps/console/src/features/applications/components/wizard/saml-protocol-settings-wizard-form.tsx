@@ -18,12 +18,21 @@
 
 import { TestableComponentInterface } from "@wso2is/core/models";
 import { URLUtils } from "@wso2is/core/utils";
-import { Field, FormValue, Forms } from "@wso2is/forms";
-import { ContentLoader, Hint, LinkButton, URLInput } from "@wso2is/react-components";
+import { Field, FormValue, Forms, Validation, useTrigger } from "@wso2is/forms";
+import { ContentLoader, Heading, Hint, LinkButton, URLInput } from "@wso2is/react-components";
+import { FormValidation } from "@wso2is/validation";
 import isEmpty from "lodash-es/isEmpty";
-import React, { FunctionComponent, ReactElement, useEffect, useState } from "react";
+import React, { FunctionComponent, MouseEvent, ReactElement, useEffect, useState } from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {Grid, Icon, Label, Message} from "semantic-ui-react";
+import {Divider, Grid, Icon, Label, Message} from "semantic-ui-react";
+import {
+    CertificateInterface,
+    CertificateTypeInterface,
+    ApplicationConfigurationModeInterface,
+    ApplicationMetadataInterface, MetadataTypeInterface
+} from "../../models";
+import {ApplicationManagementConstants} from "../../constants";
+import {AddIDPCertificateFormComponent} from "../../../identity-providers/components/wizards/steps/add-certificate-steps";
 
 /**
  * Proptypes for the oauth protocol settings wizard form component.
@@ -33,6 +42,7 @@ interface SAMLProtocolSettingsWizardFormPropsInterface extends TestableComponent
      * CORS allowed origin list for the tenant.
      */
     allowedOrigins?: string[];
+    metadata?: ApplicationMetadataInterface;
     /**
      * Set of fields to be displayed.
      */
@@ -45,6 +55,10 @@ interface SAMLProtocolSettingsWizardFormPropsInterface extends TestableComponent
      * Initial form values.
      */
     initialValues?: any;
+    /**
+     * Make the form read only.
+     */
+    readOnly?: boolean;
     /**
      * Tenant domain
      */
@@ -76,10 +90,12 @@ export const SAMLProtocolSettingsWizardForm: FunctionComponent<SAMLProtocolSetti
 ): ReactElement => {
 
     const {
+        metadata,
         allowedOrigins,
         fields,
         hideFieldHints,
         initialValues,
+        readOnly,
         templateValues,
         tenantDomain,
         triggerSubmit,
@@ -94,6 +110,11 @@ export const SAMLProtocolSettingsWizardForm: FunctionComponent<SAMLProtocolSetti
     const [ showAssertionConsumerUrlError, setAssertionConsumerUrlError ] = useState<boolean>(false);
     const [ assertionConsumerURLsErrorLabel, setAssertionConsumerURLsErrorLabel ] = useState<ReactElement>(null);
     const [ allowCORSUrls, setAllowCORSUrls ] = useState<string[]>(allowedOrigins ? allowedOrigins: []);
+    const [ isMetadataFileSelected, setMetadataFileSelected ] = useState<boolean>(false);
+    const [ isManualConfigurationSelected, setManualConfigurationSelected ] = useState<boolean>(true);
+    const [ PEMValue, setPEMValue ] = useState<string>(undefined);
+    const [ finishSubmit, setFinishSubmit ] = useTrigger();
+    const [ triggerUpload, setTriggerUpload ] = useTrigger();
 
     useEffect(() => {
         if (isEmpty(initialValues?.inboundProtocolConfiguration?.saml)) {
@@ -211,6 +232,228 @@ export const SAMLProtocolSettingsWizardForm: FunctionComponent<SAMLProtocolSetti
     };
 
     /**
+     * Handles the final wizard submission.
+     */
+    const handleWizardFormFinish = (values: any): void => {
+        // do something
+    };
+
+    const renderManualConfiguration = (): ReactElement => {
+        return (
+            <Grid>
+                { (!fields || fields.includes("issuer")) && (
+                    <Grid.Row columns={ 1 }>
+                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
+                            <Field
+                                name="issuer"
+                                label={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.issuer.label")
+                                }
+                                required={ true }
+                                requiredErrorMessage={
+                                    t("console:develop.features.applications.forms.inboundSAML.fields" +
+                                        ".issuer.validations.empty")
+                                }
+                                type="text"
+                                placeholder={
+                                    t("console:develop.features.applications.forms.inboundSAML.fields" +
+                                        ".issuer.placeholder")
+                                }
+                                value={
+                                    initialValues?.inboundProtocolConfiguration?.saml?.[
+                                        "manualConfiguration" ]?.issuer
+                                }
+                                data-testid={ `${ testId }-issuer-input` }
+                            />
+                            { !hideFieldHints && (
+                                <Hint>
+                                    { t("console:develop.features.applications.forms.inboundSAML.fields" +
+                                        ".issuer.hint") }
+                                </Hint>
+                            ) }
+                        </Grid.Column>
+                    </Grid.Row>
+                ) }
+                { (!fields || fields.includes("applicationQualifier")) && (
+                    <Grid.Row columns={ 1 }>
+                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
+                            <Field
+                                name="applicationQualifier"
+                                label={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.qualifier.label")
+                                }
+                                required={ false }
+                                requiredErrorMessage={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.qualifier.validations.empty")
+                                }
+                                type="text"
+                                placeholder={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.qualifier.placeholder")
+                                }
+                                value={
+                                    initialValues?.inboundProtocolConfiguration
+                                        .saml?.manualConfiguration?.serviceProviderQualifier
+                                }
+                                data-testid={ `${ testId }-application-qualifier-input` }
+                            />
+                            { !hideFieldHints && (
+                                <Hint>
+                                    { t("console:develop.features.applications.forms.inboundSAML.fields" +
+                                        ".qualifier.hint") }
+                                </Hint>
+                            ) }
+                        </Grid.Column>
+                    </Grid.Row>
+                ) }
+                { (!fields || fields.includes("assertionConsumerURLs")) && (
+                    <Grid.Row columns={ 1 }>
+                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 } className="field">
+                            <URLInput
+                                labelEnabled={ true }
+                                urlState={ assertionConsumerUrls }
+                                setURLState={ setAssertionConsumerUrls }
+                                handleAddAllowedOrigin={ (url) => handleAddAllowOrigin(url) }
+                                handleRemoveAllowedOrigin={ (url) => handleRemoveAllowOrigin(url) }
+                                tenantDomain={ tenantDomain }
+                                allowedOrigins={ allowCORSUrls }
+                                labelName={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.assertionURLs.label")
+                                }
+                                placeholder={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.assertionURLs.placeholder")
+                                }
+                                validationErrorMsg={
+                                    t("console:develop.features.applications.forms." +
+                                        "spaProtocolSettingsWizard.fields.callBackUrls.validations.invalid")
+                                }
+                                emptyErrorMessage={
+                                    t("console:develop.features.applications.forms.inboundSAML" +
+                                        ".fields.assertionURLs.validations.empty")
+                                }
+                                validation={ (value: string) => {
+                                    if (!(URLUtils.isURLValid(value, true) && (URLUtils.isHttpUrl(value) ||
+                                        URLUtils.isHttpsUrl(value)))) {
+
+                                        return false;
+                                    }
+
+                                    if (!URLUtils.isMobileDeepLink(value)) {
+                                        return false;
+                                    }
+
+                                    setAssertionConsumerURLsErrorLabel(null);
+
+                                    return true;
+                                } }
+                                computerWidth={ 10 }
+                                required={ true }
+                                showError={ showAssertionConsumerUrlError }
+                                setShowError={ setAssertionConsumerUrlError }
+                                hint={
+                                    !hideFieldHints && t("console:develop.features.applications" +
+                                        ".forms.inboundSAML.fields.assertionURLs.hint")
+                                }
+                                addURLTooltip={ t("common:addURL") }
+                                duplicateURLErrorMessage={ t("common:duplicateURLError") }
+                                data-testid={ `${ testId }-assertion-consumer-url-input` }
+                                getSubmit={ (submitFunction: (callback: (url?: string) => void) => void) => {
+                                    submitUrl = submitFunction;
+                                } }
+                                showPredictions={ false }
+                                customLabel={ assertionConsumerURLsErrorLabel }
+                            />
+                            {
+                                (assertionConsumerURLFromTemplate) && (
+                                    <Message className="with-inline-icon" icon visible info>
+                                        <Icon name="info" size="mini" />
+                                        <Message.Content> {
+                                            <Trans
+                                                i18nKey={ "console:develop.features.applications.forms." +
+                                                "inboundSAML.fields.assertionURLs.info" }
+                                                tOptions={ { assertionURLFromTemplate:
+                                                    assertionConsumerURLFromTemplate } }
+                                            >
+                                                Don’t have an app? Try out a sample app
+                                                using <strong>{ assertionConsumerURLFromTemplate }</strong> as
+                                                the assertion Response URL. (You can download and run a sample
+                                                at a later step.)
+                                            </Trans>
+                                        }
+                                            {
+                                                (assertionConsumerUrls === undefined ||
+                                                    assertionConsumerUrls === "") && (
+                                                    <LinkButton
+                                                        className={ "m-1 p-1 with-no-border orange" }
+                                                        onClick={ (e) => {
+                                                            e.preventDefault();
+                                                            const host = new URL(
+                                                                assertionConsumerURLFromTemplate);
+                                                            handleAddAllowOrigin(host.origin);
+                                                            setAssertionConsumerUrls(
+                                                                assertionConsumerURLFromTemplate);
+                                                        } }
+                                                        data-testid={ `${ testId }-add-now-button` }
+                                                    >
+                                                        <span style={ { fontWeight: "bold" } }>Add Now</span>
+                                                    </LinkButton>
+                                                )
+                                            }
+                                        </Message.Content>
+                                    </Message>
+                                )
+                            }
+                        </Grid.Column>
+                    </Grid.Row>
+                ) }
+            </Grid>
+        );
+    };
+
+    const renderURLConfiguration = (): ReactElement => {
+        return (
+            <>
+                <Field
+                    name="metadataURLValue"
+                    label={
+                        t("console:develop.features.applications.forms.inboundSAML.sections" +
+                            ".configuration.fields.metadataURL.label")
+                    }
+                    required={ false }
+                    requiredErrorMessage={
+                        t("console:develop.features.applications.forms.inboundSAML.sections" +
+                            ".configuration.fields.metadataURL.validations.empty")
+                    }
+                    placeholder={
+                        t("console:develop.features.applications.forms.inboundSAML.sections" +
+                            ".configuration.fields.metadataURL.placeholder")
+                    }
+                    type="text"
+                    validation={ (value: string, validation: Validation) => {
+                        if (!FormValidation.url(value)) {
+                            validation.isValid = false;
+                            validation.errorMessages.push(
+                                t("console:develop.features.applications.forms.inboundSAML.sections" +
+                                    ".configuration.fields.metadataURL.validations.invalid")
+                            );
+                        }
+                    } }
+                    value={
+                        (MetadataTypeInterface.URL === metadata?.type)
+                        && metadata?.value
+                    }
+                    readOnly={ readOnly }
+                    data-testid={ `${ testId }-metadata-url-input` }
+                />
+            </>
+        );
+    };
+    /**
      * submitURL function.
      */
     let submitUrl: (callback: (url?: string) => void) => void;
@@ -231,178 +474,75 @@ export const SAMLProtocolSettingsWizardForm: FunctionComponent<SAMLProtocolSetti
                     } }
                     submitState={ triggerSubmit }
                 >
-                    <Grid>
-                        { (!fields || fields.includes("issuer")) && (
-                            <Grid.Row columns={ 1 }>
-                                <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
-                                    <Field
-                                        name="issuer"
-                                        label={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.issuer.label")
-                                        }
-                                        required={ true }
-                                        requiredErrorMessage={
-                                            t("console:develop.features.applications.forms.inboundSAML.fields" +
-                                                ".issuer.validations.empty")
-                                        }
-                                        type="text"
-                                        placeholder={
-                                            t("console:develop.features.applications.forms.inboundSAML.fields" +
-                                                ".issuer.placeholder")
-                                        }
-                                        value={
-                                            initialValues?.inboundProtocolConfiguration?.saml?.[
-                                                "manualConfiguration" ]?.issuer
-                                        }
-                                        data-testid={ `${ testId }-issuer-input` }
-                                    />
-                                    { !hideFieldHints && (
-                                        <Hint>
-                                            { t("console:develop.features.applications.forms.inboundSAML.fields" +
-                                                ".issuer.hint") }
-                                        </Hint>
-                                    ) }
-                                </Grid.Column>
-                            </Grid.Row>
-                        ) }
-                        { (!fields || fields.includes("applicationQualifier")) && (
-                            <Grid.Row columns={ 1 }>
-                                <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
-                                    <Field
-                                        name="applicationQualifier"
-                                        label={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.qualifier.label")
-                                        }
-                                        required={ false }
-                                        requiredErrorMessage={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.qualifier.validations.empty")
-                                        }
-                                        type="text"
-                                        placeholder={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.qualifier.placeholder")
-                                        }
-                                        value={
-                                            initialValues?.inboundProtocolConfiguration
-                                                .saml?.manualConfiguration?.serviceProviderQualifier
-                                        }
-                                        data-testid={ `${ testId }-application-qualifier-input` }
-                                    />
-                                    { !hideFieldHints && (
-                                        <Hint>
-                                            { t("console:develop.features.applications.forms.inboundSAML.fields" +
-                                                ".qualifier.hint") }
-                                        </Hint>
-                                    ) }
-                                </Grid.Column>
-                            </Grid.Row>
-                        ) }
-                        { (!fields || fields.includes("assertionConsumerURLs")) && (
-                            <Grid.Row columns={ 1 }>
-                                <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 } className="field">
-                                    <URLInput
-                                        labelEnabled={ true }
-                                        urlState={ assertionConsumerUrls }
-                                        setURLState={ setAssertionConsumerUrls }
-                                        handleAddAllowedOrigin={ (url) => handleAddAllowOrigin(url) }
-                                        handleRemoveAllowedOrigin={ (url) => handleRemoveAllowOrigin(url) }
-                                        tenantDomain={ tenantDomain }
-                                        allowedOrigins={ allowCORSUrls }
-                                        labelName={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.assertionURLs.label")
-                                        }
-                                        placeholder={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.assertionURLs.placeholder")
-                                        }
-                                        validationErrorMsg={
-                                            t("console:develop.features.applications.forms." +
-                                                "spaProtocolSettingsWizard.fields.callBackUrls.validations.invalid")
-                                        }
-                                        emptyErrorMessage={
-                                            t("console:develop.features.applications.forms.inboundSAML" +
-                                                ".fields.assertionURLs.validations.empty")
-                                        }
-                                        validation={ (value: string) => {
-                                            if (!(URLUtils.isURLValid(value, true) && (URLUtils.isHttpUrl(value) ||
-                                                URLUtils.isHttpsUrl(value)))) {
-
-                                                return false;
-                                            }
-
-                                            if (!URLUtils.isMobileDeepLink(value)) {
-                                                return false;
-                                            }
-
-                                            setAssertionConsumerURLsErrorLabel(null);
-
-                                            return true;
-                                        } }
-                                        computerWidth={ 10 }
-                                        required={ true }
-                                        showError={ showAssertionConsumerUrlError }
-                                        setShowError={ setAssertionConsumerUrlError }
-                                        hint={
-                                            !hideFieldHints && t("console:develop.features.applications" +
-                                                ".forms.inboundSAML.fields.assertionURLs.hint")
-                                        }
-                                        addURLTooltip={ t("common:addURL") }
-                                        duplicateURLErrorMessage={ t("common:duplicateURLError") }
-                                        data-testid={ `${ testId }-assertion-consumer-url-input` }
-                                        getSubmit={ (submitFunction: (callback: (url?: string) => void) => void) => {
-                                            submitUrl = submitFunction;
-                                        } }
-                                        showPredictions={ false }
-                                        customLabel={ assertionConsumerURLsErrorLabel }
-                                    />
-                                    {
-                                        (assertionConsumerURLFromTemplate) && (
-                                            <Message className="with-inline-icon" icon visible info>
-                                                <Icon name="info" size="mini" />
-                                                <Message.Content> {
-                                                    <Trans
-                                                        i18nKey={ "console:develop.features.applications.forms." +
-                                                        "inboundSAML.fields.assertionURLs.info" }
-                                                        tOptions={ { assertionURLFromTemplate:
-                                                            assertionConsumerURLFromTemplate } }
-                                                    >
-                                                        Don’t have an app? Try out a sample app
-                                                        using <strong>{ assertionConsumerURLFromTemplate }</strong> as
-                                                        the assertion Response URL. (You can download and run a sample
-                                                        at a later step.)
-                                                    </Trans>
-                                                }
-                                                    {
-                                                        (assertionConsumerUrls === undefined ||
-                                                            assertionConsumerUrls === "") && (
-                                                            <LinkButton
-                                                                className={ "m-1 p-1 with-no-border orange" }
-                                                                onClick={ (e) => {
-                                                                    e.preventDefault();
-                                                                    const host = new URL(
-                                                                        assertionConsumerURLFromTemplate);
-                                                                    handleAddAllowOrigin(host.origin);
-                                                                    setAssertionConsumerUrls(
-                                                                        assertionConsumerURLFromTemplate);
-                                                                } }
-                                                                data-testid={ `${ testId }-add-now-button` }
-                                                            >
-                                                                <span style={ { fontWeight: "bold" } }>Add Now</span>
-                                                            </LinkButton>
-                                                        )
-                                                    }
-                                                </Message.Content>
-                                            </Message>
-                                        )
+                    { /* Configuration Modes */ }
+                    <Grid.Row columns={ 1 }>
+                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
+                            <Divider/>
+                        </Grid.Column>
+                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
+                            <Heading as="h5">
+                                {
+                                    t("console:develop.features.applications.forms.inboundSAML.sections" +
+                                        ".configuration.heading")
+                                }
+                            </Heading>
+                            <Field
+                                name="type"
+                                default={ ApplicationConfigurationModeInterface.MANUAL }
+                                listen={
+                                    (values) => {
+                                        setMetadataFileSelected(values.get("type") === "METADATA_FILE");
+                                        setManualConfigurationSelected(values.get("type") === "MANUAL");
                                     }
-                                </Grid.Column>
-                            </Grid.Row>
-                        ) }
-                    </Grid>
+                                }
+                                type="radio"
+                                value={ metadata?.type }
+                                children={ [
+                                    {
+                                        label: t("console:develop.features.applications.forms.inboundSAML" +
+                                            ".sections.configuration.types.manual"),
+                                        value: ApplicationConfigurationModeInterface.MANUAL
+                                    },
+                                    {
+                                        label: t("console:develop.features.applications.forms.inboundSAML" +
+                                            ".sections.configuration.types.metadataFile"),
+                                        value: ApplicationConfigurationModeInterface.METADATA_FILE
+                                    },
+                                    {
+                                        label: t("console:develop.features.applications.forms.inboundSAML" +
+                                            ".sections.configuration.types.metadataURL"),
+                                        value: ApplicationConfigurationModeInterface.METADATA_URL
+                                    }
+                                ] }
+                                readOnly={ readOnly }
+                                data-testid={ `${ testId }-configuration-mode-radio-group` }
+                            />
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row columns={ 1 }>
+                        <Grid.Column mobile={ 16 } tablet={ 16 } computer={ 16 }>
+                            {
+                                isMetadataFileSelected
+                                    ?
+                                    (
+                                        <>
+                                            <AddIDPCertificateFormComponent
+                                                triggerCertificateUpload={ triggerUpload }
+                                                triggerSubmit={ finishSubmit }
+                                                onSubmit={ handleWizardFormFinish }
+                                            />
+                                        </>
+                                    )
+                                    : (
+                                        isManualConfigurationSelected
+                                            ?
+                                                renderManualConfiguration()
+                                            :
+                                                renderURLConfiguration()
+                                    )
+                            }
+                        </Grid.Column>
+                    </Grid.Row>
                 </Forms>
             )
             : <ContentLoader/>
