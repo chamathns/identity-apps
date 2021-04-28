@@ -8,7 +8,7 @@
  */
 
 import { TestableComponentInterface } from "@wso2is/core/models";
-import { CodeEditor, GenericIcon, Heading, Text } from "@wso2is/react-components";
+import { CodeEditor, GenericIcon, Heading, MessageInfo, Text } from "@wso2is/react-components";
 import React, { FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
 import { Divider, Icon, Message } from "semantic-ui-react";
 import {
@@ -90,17 +90,18 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
             return (
                 <>
                     <Text>
-                        To ease the developers, we&apos;ve introduced the <a
-                        href="https://github.com/asgardeo/asgardeo-tomcat-saml-agent"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link external"
-                    >Asgardeo SAML Agent</a>. You can use this Agent in your project by updating
+                        To ease development, we&apos;ve introduced the <a
+                            href="https://github.com/asgardeo/asgardeo-tomcat-saml-agent"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="link external"
+                        >Asgardeo SAML Agent</a>. You can use this Agent in your project by updating
                         your <code className="inline-code">pom.xml</code> file with the following dependency.
                     </Text>
 
                     <div className="code-segment">
                         <CodeEditor
+                            beautify
                             readOnly
                             showLineNumbers
                             withClipboardCopy
@@ -171,20 +172,17 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
             return (
                 <>
                     <Text>
-                        We&apos;re configuring the application to integrate with Asgardio using a property file,
-                        which is read by the Asgardeo SAML Agent.
+                        We provide the Asgardeo endpoints to the application using a property file, which is read
+                        by the Asgardeo SAML Agent.
                     </Text>
                     <Text>
                         Create a file named <code className="inline-code">sample-app.properties</code> inside the <code
-                        className="inline-code">&#60;APP_HOME&#62;/src/main/resources</code> directory,
+                        className="inline-code">&#60;YOUR_APP&#62;/src/main/resources</code> directory,
                         using the content below.
                     </Text>
                     <Text>
-                        Note the property <code className="inline-code">SkipURIs</code> which defines the application
-                        paths that will not be secured. Make sure to change <code
-                        className="inline-code">&lt;YOUR_APP_PATH&gt;</code> with the context of your application.
-                        You&apos;ll be able to access the index page without logging in, but for all other pages,
-                        login will be required.
+                        Note the <strong>skipURIs</strong> property. This property defines the web pages in your
+                        application that should not be secured, and do not require authentication.
                     </Text>
                     <div className="code-segment" style={ { maxWidth: "1160px" } }>
                         <CodeEditor
@@ -327,28 +325,31 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
 
     const renderPrerequisitesStep = (): ReactElement => {
 
+        const generateContent = () => {
+            return (
+                <p>
+                    In this section, we guide you on how to configure your own Java application that
+                    uses <strong>Apache Maven</strong> (3.6.x or higher) as the package manager
+                    and <GenericIcon
+                    transparent
+                    icon={ TomcatLogo }
+                    size="micro"
+                    style={ {
+                        "display": "inline",
+                        "vertical-align": "sub"
+                    } }
+                    /> <strong>Apache Tomcat</strong> (8.x or higher) as the deployment engine. You may
+                    need to adjust some of the steps if you&apos;re working with a different application
+                    container or technology.
+                </p>
+            );
+        };
+
         return (
             <div className="mt-3 mb-6">
-                <Heading as="h3">Prerequisite</Heading>
-                <Message
-                    icon="info circle"
-                    content={ (
-                        <p>
-                            In this section, we guide you on how to configure your own Java application that
-                            uses <strong>Apache Maven</strong> (3.6.x or higher) as the package manager
-                            and <GenericIcon
-                            transparent
-                            icon={ TomcatLogo }
-                            size="micro"
-                            style={ {
-                                "display": "inline",
-                                "vertical-align": "sub"
-                            } }
-                        /> <strong>Apache Tomcat</strong> (8.x or higher) as the deployment engine. You may 
-                            need to adjust some of the steps if you&apos;re working with a different application 
-                            container or technology.
-                        </p>
-                    ) }
+                <MessageInfo
+                    header={ "Prerequisite" }
+                    content={ generateContent() }
                 />
             </div>
         );

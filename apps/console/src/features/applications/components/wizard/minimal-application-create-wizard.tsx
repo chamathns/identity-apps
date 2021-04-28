@@ -196,6 +196,10 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
             set(templateSettingsClone, `application.${ allowedOriginsPathKey }`, []);
         }
 
+        if(templateSettingsClone?.application?.inboundProtocolConfiguration?.saml?.templateConfiguration) {
+            delete templateSettingsClone?.application?.inboundProtocolConfiguration?.saml?.templateConfiguration;
+        }
+
         const application: MainApplicationInterface = merge(templateSettingsClone?.application, protocolFormValues);
 
         application.name = generalFormValues.get("name").toString();
@@ -351,6 +355,7 @@ export const MinimalAppCreateWizard: FunctionComponent<MinimalApplicationCreateW
         } else if (selectedTemplate.authenticationProtocol === SupportedAuthProtocolTypes.SAML) {
             return (
                 <SAMLProtocolSettingsWizardForm
+                    tenantDomain={ tenantName }
                     fields={ [ "issuer", "assertionConsumerURLs" ] }
                     hideFieldHints={ true }
                     triggerSubmit={ submitProtocolForm }
