@@ -45,8 +45,12 @@
                         }
                     }
                 },
-                "allowedOrigins": [ "https://localhost:8080" ],
-                "assertionConsumerURLs": [ "http://localhost:8080/sample-app/home.jsp" ]
+                "templateConfiguration": {
+                    "assertionConsumerUrls": [
+                        "http://localhost:8080/sample-app/home.jsp"
+                    ],
+                    "issuer": "sample-app"
+                }
             }
         }
     }
