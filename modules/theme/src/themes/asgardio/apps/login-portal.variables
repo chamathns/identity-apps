@@ -1,0 +1,46 @@
+/*******************************
+        Login Variables
+*******************************/
+
+/*-----------------------------
+     Login Portals Commons
+------------------------------*/
+
+@loginPortalBackgroundColor: @asgardeoBlack;
+@loginPortalBackgroundImage: url("assets/images/accounts-page-background.svg");
+@loginPortalBackgroundSize: auto;
+@loginPortalBackgroundPosition: 0 calc(100% - 39px);
+@loginPortalProductLogoHeight: 30px;
+@loginPortalLoginCardBorderRadius: 10px;
+@loginPortalSegmentBackgroundColor: #F3F3F3;
+@loginPortalSegmentPrimaryActionBackgroundColor: #465867;
+@loginPortalExternalLinkFontSize: 0.9em;
+@loginPortalCenterContainer: calc(100% - 41px);
+@loginPortalClickableLinkColor: #FF8E32;
+
+@landingPageBackground: url("assets/images/landing-bg.svg");
+@landingPageBackgroundPosition: 100% calc(100% - 39px);
+
+@centeredMessageHeaderColor: #d9e1e8;
+@centeredMessageDescColor: #999ea2;
+
+@loginPortalLogoTaglineMaxWidth: 570px;
+@LoginPortalRegistrationMaxWidth: 500px;
+
+@loginPortalLogoTaglineColor: #d9e1e8;
+@loginPortalLogoTaglineFontWeight: 300 !important;
+@loginPortalLogoTaglineDescriptionColor: #999ea2;
+@loginPortalLogoTaglineDescriptionMarginTop: 40px;
+@loginPortalLogoSecondaryTagLineColor: #FF7300;
+
+@loginPortalFooterBackground: linear-gradient(to top right, #212A32, #36414B);
+@loginPortalFooterBorderTop: 1px solid #454d52;
+@loginPortalFooterPadding: 0 8rem;
+@loginPortalFooterLineHeight: 40px;
+
+@loginPortalAppHeaderLogoHeight: 30px;
+@loginPortalAppHeaderBackground: @asgardeoBlack;
+@loginPortalAppHeaderBorderBottom: 1px solid #454d52;
+
+@policyPageBackgroundImage: none;
+@policyPageTOCBackground: @asgardeoBlack;

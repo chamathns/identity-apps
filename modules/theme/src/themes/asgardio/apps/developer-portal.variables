@@ -1,0 +1,105 @@
+/*******************************
+   Developer Portal Variables
+*******************************/
+
+// Getting Started Page
+
+@gettingStartedPageMaxWidth: 1400px;
+
+@gettingStartedPageSectionCardPadding: 1em;
+@gettingStartedPageSectionCardMinHeight: 200px;
+
+@gettingStartedPageAuthDemoCardPaddingRight: 2em;
+@gettingStartedPageAuthDemoCardBackgroundRepeat: no-repeat;
+@gettingStartedPageAuthDemoCardBackgroundPosition: right -5px;
+@gettingStartedPageAuthDemoCardBackgroundSize: contain;
+@gettingStartedPageAuthDemoCardBackgroundColor: @asgardeoBlack;
+@gettingStartedPageAuthDemoCardBackgroundOrigin: content-box;
+@gettingStartedPageAuthDemoCardActionColor: @primaryColor;
+
+@gettingStartedPageIntegrationCardBackgroundRepeat: no-repeat;
+@gettingStartedPageIntegrationCardBackgroundPosition: right;
+@gettingStartedPageIntegrationCardBackgroundColor: #41a5a1;
+@gettingStartedPageIntegrationCardBackgroundOrigin: content-box;
+@gettingStartedPageIntegrationCardHeaderColor: @white;
+@gettingStartedPageIntegrationCardDescriptionColor: @white;
+@gettingStartedPageIntegrationCardActionColor: @white;
+
+@gettingStartedPageBusinessUsersCardBackgroundRepeat: no-repeat;
+@gettingStartedPageBusinessUsersCardBackgroundPosition: right;
+@gettingStartedPageBusinessUsersCardBackgroundColor: #275067;
+@gettingStartedPageBusinessUsersCardBackgroundOrigin: content-box;
+@gettingStartedPageBusinessUsersCardHeaderColor: @white;
+@gettingStartedPageBusinessUsersCardDescriptionColor: @white;
+@gettingStartedPageBusinessUsersCardActionColor: @white;
+
+@gettingStartedPageMFACardBackgroundRepeat: no-repeat;
+@gettingStartedPageMFACardBackgroundSize: contain;
+@gettingStartedPageMFACardBackgroundPosition: right;
+@gettingStartedPageMFACardBackgroundColor: #5e667d;
+@gettingStartedPageMFACardBackgroundOrigin: content-box;
+@gettingStartedPageMFACardActionColor: @white;
+@gettingStartedPageMFACardHeaderColor: @white;
+@gettingStartedPageMFACardDescriptionColor: #bccbd8;
+
+@gettingStartedPageSocialLoginCardBackgroundRepeat: no-repeat;
+@gettingStartedPageSocialLoginCardBackgroundSize: contain;
+@gettingStartedPageSocialLoginCardBackgroundPosition: right;
+@gettingStartedPageSocialLoginCardBackgroundColor: #3e5b6b;
+@gettingStartedPageSocialLoginCardBackgroundOrigin: unset;
+@gettingStartedPageSocialLoginCardHeaderColor: @white;
+@gettingStartedPageSocialLoginCardDescriptionColor: #a6bac5;
+@gettingStartedPageSocialLoginCardActionColor: @white;
+
+@gettingStartedPageStackableGridColumnsPaddingTop: 1em;
+@gettingStartedPageStackableGridColumnsPaddingBottom: 1em;
+
+@gettingStartedPageSectionCardsMobileScreenBackgroundImage: none !important;
+
+@gettingStartedPageSupportSectionDisplay: flex;
+@gettingStartedPageSupportHeadphoneIconFontSize: 3em;
+@gettingStartedPageSupportHeadphoneIconMargin: 0 0.3em 0 0;
+
+@feedbackIconMargin: 0.1em .7em 0 0;
+@feedbackIconFloat: left;
+
+@consoleWelcomeTourMaskBackground: @asgardeoBlack;
+@consoleWelcomeTourMinWidth: 480px;
+@consoleWelcomeTourTextAlign: center;
+@consoleWelcomeTourBoxShadow: none;
+@consoleWelcomeTourPadding: 40px;
+@consoleWelcomeTourStepDescriptionFontSize: 16px;
+@consoleWelcomeTourStepDescriptionLetterSpacing: 0;
+@consoleWelcomeTourStepDescriptionMinHeight: 80px;
+@consoleWelcomeTourStepDescriptionLineHeight: 25px;
+
+/*-------------------------------
+    Application Quickstart Tab
+--------------------------------*/
+
+@applicationSampleConfigEditorMinHeight: 200px;
+@applicationSampleConfigEditorHeight: auto;
+
+@darkCodeBlockBgColor: #263238;
+@darkCodeBlockColor: @white;
+
+@quickStartStepPaddingLeft: 46px;
+@quickStartStepMarginTop: -28px;
+
+@quickStartCardTitleHeight: 1.3em;
+@quickStartCardContentHeight: 1.1em;
+
+@checkboxDisabledOpacity: 0.5;
+
+/*-------------------------------
+    Application Tabs common
+--------------------------------*/
+
+@applicationListItemLineHeight: 1.4285em;
+@applicationSubjectSelectWidth: 820px;
+
+/*-------------------------------
+    Help Center Button
+--------------------------------*/
+
+@helpCenterButtonIconColor: @galleryGray;

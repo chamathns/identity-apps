@@ -1,22 +1,85 @@
 /**
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.com). All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * This software is the property of WSO2 Inc. and its suppliers, if any.
+ * Dissemination of any information or reproduction of any material contained
+ * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
+ * You may not alter or remove any copyright or other notice from copies of this content."
  */
 
 import { Extensions } from "../../models";
 export const extensions: Extensions = {
-
+    manage: {
+        attributes: {
+            attributes: {
+                description: "View and manage attributes"
+            }
+        },
+        features: {
+            tenant: {
+                header: {
+                    tenantSwitchHeader: "Switch Organization",
+                    tenantAddHeader: "New Organization",
+                    tenantDefaultButton: "Default",
+                    tenantMakeDefaultButton: "Make default"
+                },
+                wizards: {
+                    addTenant: {
+                        heading: "Add New Organization",
+                        forms: {
+                            fields: {
+                                tenantName: {
+                                    label: "Organization Name",
+                                    placeholder: "Organization name (E.g., myorg)",
+                                    validations: {
+                                        empty: "This is a required field.",
+                                        duplicate: "An organization with the name {{ tenantName }} already exists." +
+                                            " Please try a different name.",
+                                        invalid: "The name you entered contains disallowed characters. It can" +
+                                            " contain up to {{ characterLimit }} characters, can only consist of" +
+                                            " lowercase alphanumerics and it must always begin with an alphabet" +
+                                            " character."
+                                    }
+                                }
+                            },
+                            loaderMessages: {
+                                duplicateCheck: "Validating new organization name...",
+                                tenantCreate: "Creating the new organization...",
+                                tenantSwitch: "Please wait while we redirect you to the new organization..."
+                            }
+                        },
+                        tooltips: {
+                            message: "You will use this URL to access the new organization."
+                        }
+                    }
+                },
+                notifications: {
+                    addTenant: {
+                        error: {
+                            description: "{{ description }}",
+                            message: "Error Creating Organization"
+                        },
+                        genericError: {
+                            description: "An error occurred while creating the organization.",
+                            message: "Error Creating Organization"
+                        },
+                        success: {
+                            description: "Successfully created organization {{ tenantName }}.",
+                            message: "Organization Created"
+                        }
+                    },
+                    defaultTenant: {
+                        genericError: {
+                            description: "An error occurred while updating your default organization.",
+                            message: "Error Updating Organization"
+                        },
+                        success: {
+                            description: "Successfully set {{ tenantName }} your default organization.",
+                            message: "Updated Default Organization"
+                        }
+                    }
+                }
+            }
+        }
+    }
 };

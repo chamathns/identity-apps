@@ -1,0 +1,64 @@
+/*******************************
+       Message Overrides
+*******************************/
+
+/*-------------------
+    Announcement
+--------------------*/
+
+.ui.message {
+    &.announcement {
+        border-radius: 0;
+        box-shadow: none;
+        margin-bottom: 0;
+        padding: @announcementPadding;
+        font-weight: 400;
+
+        &.primary {
+            color: @white;
+            background: @primaryColor;
+        }
+        &.secondary {
+            color: @white;
+            background: @secondaryColor;
+        }
+    }
+
+    &.border-less {
+        border: none !important;
+        box-shadow: none;
+    }
+}
+
+/*------------------------
+    TOTP
+-------------------------*/
+
+.ui.message {
+    &.totp-tooltip {
+        box-shadow: 0 0 0 1px @tooltipBachGroundoxColor inset;
+        background-color: @tooltipBachGroundoxColor;
+        color: @tooltipColor;
+        text-align: left;
+    }
+    &.totp-error-message {
+        box-shadow: 0 0 0 1px #e0b4b4 inset;
+        background-color: @tooltipErrorBachGroundoxColor;
+        color: @tooltipErrorColor;
+        text-align: center;
+        margin-right: 2rem;
+        margin-left: 2rem;
+    }
+}
+
+/*------------------------
+    Message With Icon
+-------------------------*/
+
+.ui.message {
+    &.with-inline-icon {
+        >.icon:not(.close) {
+            font-size: 2em;
+        }
+    }
+}
