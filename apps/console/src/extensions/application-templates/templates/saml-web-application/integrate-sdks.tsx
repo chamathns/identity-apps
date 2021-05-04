@@ -8,9 +8,10 @@
  */
 
 import { TestableComponentInterface } from "@wso2is/core/models";
-import { CodeEditor, GenericIcon, Heading, MessageInfo, Text } from "@wso2is/react-components";
-import React, { FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
-import { Divider, Icon, Message } from "semantic-ui-react";
+import { FormValidation } from "@wso2is/validation";
+import { CodeEditor, GenericIcon, Hint, MessageInfo, Text } from "@wso2is/react-components";
+import React, { ChangeEvent, FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
+import { Divider, Form, Icon, InputOnChangeData, Message } from "semantic-ui-react";
 import {
     tomcatSAMLAgentLoginButtonCode,
     tomcatSAMLAgentLogoutCode,
@@ -57,6 +58,8 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
     } = props;
 
     const [ SDKInitConfig, setSDKInitConfig ] = useState(undefined);
+    const [ appContextPath, setAppContextPath ] = useState<string>(null);
+    const [ isValidAppContextPath, setIsValidAppContextPath ] = useState<boolean>(true);
 
     useEffect(() => {
         if (!inboundProtocolConfig?.saml) {
@@ -82,6 +85,47 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
         }
 
         return "Configure Client";
+    };
+
+    const handleURLFieldUpdate = (e: ChangeEvent, data: InputOnChangeData) => {
+        if (FormValidation.url(data.value)) {
+            setIsValidAppContextPath(true);
+            setAppContextPath(data.value);
+        } else {
+            setAppContextPath(null);
+            setIsValidAppContextPath(false);
+        }
+    }
+
+    const renderAppContextInput = () => {
+
+        return  (
+            <>
+                <Form>
+                    <Form.Group widths="3">
+                        <Form.Input
+                            fluid
+                            placeholder="https://myapp.io"
+                            label="App Context Path"
+                            value={ appContextPath }
+                            onChange={ (e, data) => {
+                                handleURLFieldUpdate(e, data);
+                            } }
+                        />
+                    </Form.Group>
+                    <Hint>
+                        The configuration <code className="inline-code">skipURIs</code> depends on
+                        your <strong>App context path</strong>.
+                    </Hint>
+                </Form>
+
+                { !isValidAppContextPath && (
+                    <Message error>
+                        <p>Please enter a valid URL</p>
+                    </Message>
+                ) }
+            </>
+        );
     };
 
     const generateConfigureStep = (technology: SupportedTraditionalSAMLAppTechnologyTypes): ReactNode => {
@@ -184,13 +228,18 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
                         Note the <strong>skipURIs</strong> property. This property defines the web pages in your
                         application that should not be secured, and do not require authentication.
                     </Text>
+
+                    <Divider hidden />
+
+                    { renderAppContextInput() }
+
                     <div className="code-segment" style={ { maxWidth: "1160px" } }>
                         <CodeEditor
                             readOnly
                             showLineNumbers
                             withClipboardCopy
                             language="htmlmixed"
-                            sourceCode={ tomcatSAMLAgentSamplePropertiesCode(SDKInitConfig) }
+                            sourceCode={ tomcatSAMLAgentSamplePropertiesCode(SDKInitConfig, appContextPath) }
                             options={ {
                                 lineWrapping: true
                             } }
@@ -198,7 +247,18 @@ export const IntegrateSDKs: FunctionComponent<IntegrateSDKsPropsInterface> = (
                         />
                     </div>
 
-                    <Divider hidden />
+                    <Divider hidden/>
+
+                    <Text>
+                        A comprehensive list of the properties used above, can be found in the <a
+                        href={ SDKMeta.tomcatSAMLAgent.catalog }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link external"
+                    >Configuration Catalog</a>.
+                    </Text>
+
+                    <Divider hidden/>
 
                     <Text>
                         For advanced use cases such as SAML response signing, the Asgardeo SAML Agent uses a keystore

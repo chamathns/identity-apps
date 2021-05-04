@@ -235,8 +235,9 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                         )
                     }
 
-                    <div className="code-segment" style={ {maxWidth: "1160px"} }>
+                    <div className="code-segment">
                         <CodeEditor
+                            beautify
                             readOnly
                             withClipboardCopy
                             showLineNumbers

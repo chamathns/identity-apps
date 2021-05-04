@@ -32,74 +32,36 @@ export const wso2InternalRepoPointingCode = () => {
 </repositories>`;
 };
 
-export const tomcatSAMLAgentSamplePropertiesCode = (config: any) => {
+export const tomcatSAMLAgentSamplePropertiesCode = (config: any, appContextPath: string) => {
 
     if (!config) {
         return null;
     }
 
-    return `# The URL of the SAML 2.0 Assertion Consumer
-SAML2.AssertionConsumerURL=${ config.acsURL }
+    const appContext: string = appContextPath && appContextPath !== ""
+        ? appContextPath
+        : "<YOUR_APP_PATH>";
 
-# A unique identifier for this SAML 2.0 application
+    return `SAML2.AssertionConsumerURL=${ config.acsURL }
 SAML2.SPEntityId=${ config.samlIssuer }
-
-# A unique identifier for this SAML 2.0 Identity Provider
 SAML2.IdPEntityId=${ config.issuer }
-
-# The URL of the SAML 2.0 Identity Provider
 SAML2.IdPURL=${ config.ssoUrl }
-
-# Pem content of the IDP public certificate
-IdPPublicCert=${ config.certificate?.replace(/(\r\n|\n|\r)/gm,"")}
-
-# Adanced Properties - Only need to be changed for advanced use cases.
-
-# Url to do send SAML2 SSO AuthnRequest
+SkipURIs=${ appContext }/index.html
 SAML2SSOURL=samlsso
-
-# URIs to skip SSOAgentFilter; comma separated values
-SkipURIs=/<YOU_APP_CONTEXT>/index.html
-
 IndexPage=index.html
-
 ErrorPage=/error.jsp
-
-# Specify if Single Sign on is enabled/disabled
 EnableSAML2SSOLogin=true
-
-# Specify if SingleLogout is enabled/disabled
 SAML2.EnableSLO=true
-
-# This is the URL that is used for SLO
 SAML2.SLOURL=logout
-
-# Specify if SAMLResponse element is signed
 SAML2.EnableResponseSigning=false
-
-# Specify if SAMLAssertion element is signed
 SAML2.EnableAssertionSigning=false
-
-# Specify if SAMLAssertion element is encrypted
 SAML2.EnableAssertionEncryption=false
-
-# Specify if AuthnRequests and LogoutRequests should be signed
 SAML2.EnableRequestSigning=false
-
-# Specify if SAML request is a passive
 SAML2.IsPassiveAuthn=false
-
-# Password of the KeyStore
+IdPPublicCert=${ config.certificate?.replace(/(\r\n|\n|\r)/gm,"")}
 KeyStorePassword=<PASSWORD>
-
-# Alias of the SP's private key 
 PrivateKeyAlias=<ALIAS>
-
-# Alias of the IdP's public certificate
 IdPPublicCertAlias=wso2carbon
-
-# Private key password to retrieve the private key used to sign
-# AuthnRequest and LogoutRequest messages
 PrivateKeyPassword=wso2carbon`;
 };
 
@@ -159,18 +121,15 @@ export const tomcatSAMLAgentDockerEnvCode = (config: any) => {
         ? config.tomcatHost
         : "<TOMCAT_HOST>";
 
-    return `# The URL of the SAML 2.0 Assertion Consumer
-SAML2.AssertionConsumerURL=${ tomcatHost }/sample-app/home.jsp
-
-# A unique identifier for this SAML 2.0 application
+    return `SAML2.AssertionConsumerURL=${ tomcatHost }/sample-app/home.jsp
 SAML2.SPEntityId=${ config.samlIssuer }
-
-# A unique identifier for this SAML 2.0 Identity Provider
 SAML2.IdPEntityId=${ config.issuer }
-
-# The URL of the SAML 2.0 Identity Provider
 SAML2.IdPURL=${ config.ssoUrl }
-
-# Pem content of the IDP public certificate
-IdPPublicCert=${ config.certificate?.replace(/(\r\n|\n|\r)/gm,"")}`;
+SAML2SSOURL=samlsso
+EnableSAML2SSOLogin=true
+SAML2.EnableSLO=true
+SAML2.SLOURL=logout
+SkipURIs=/sample-app/index.html
+IndexPage=index.html
+ErrorPage=/error.jsp`;
 };

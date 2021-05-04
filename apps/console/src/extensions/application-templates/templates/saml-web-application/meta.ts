@@ -9,6 +9,8 @@
 
 export const SDKMeta = {
     tomcatSAMLAgent: {
+        catalog: "https://github.com/asgardeo/asgardeo-tomcat-saml-agent/blob/master/" +
+            "io.asgardeo.tomcat.saml.agent.sample/src/main/resources/configuration-catalog.md",
         readme: "https://github.com/asgardeo/asgardeo-tomcat-saml-agent/blob/master/README.md",
         sample: {
             acsURLSuffix: "/sample-app/home.jsp",
