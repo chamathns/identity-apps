@@ -1,0 +1,25 @@
+/*******************************
+        Menu Variables
+*******************************/
+
+/*-------------------
+      App Header
+--------------------*/
+
+@appHeaderBackground: @asgardeoBlack;
+@appHeaderHamburgerIconColor: @galleryGray;
+@appHeaderBorderBottom: 1px solid #c9c9c9;
+
+/*-------------------
+    User Dropdown
+--------------------*/
+
+@userDropdownTriggerTextColor: @galleryGray;
+
+/*-------------------
+    Tenant Dropdown
+--------------------*/
+
+@tenantDropdownWrapperPaddingLeft: 0;
+@tenantDropdownTriggerDisplayNameMaxWidth: 120px;
+@tenantDropdownSeparatorBorderColor: #7a8084;

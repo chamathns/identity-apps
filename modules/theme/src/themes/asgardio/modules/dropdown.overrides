@@ -1,0 +1,44 @@
+/*******************************************
+        Labeled Dropdown Variation
+*******************************************/
+
+.ui.dropdown {
+    &.labeled {
+        &.horizontal {
+            &.right {
+                margin-left: @labeledDropdownHorizontalSpacing;
+            }
+            &.left {
+                margin-right: @labeledDropdownHorizontalSpacing;
+            }
+        }
+    }
+
+    &.disabled {
+        opacity: 1;
+
+        >.text {
+            opacity: 0.45;
+        }
+
+        .dropdown.icon {
+            display: none; 
+        }
+    }
+}
+
+/*******************************************
+        User Type Dropdown Variation
+*******************************************/
+
+.ui.dropdown {
+    &.user-dropdown {
+        .menu {
+            .item {
+                &.user-dropdown-menu-item {
+                    width: 148px;
+                }
+            }
+        }
+    }
+}

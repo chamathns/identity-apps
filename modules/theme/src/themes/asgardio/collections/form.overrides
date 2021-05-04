@@ -1,0 +1,111 @@
+/*******************************
+        Form Overrides
+*******************************/
+
+/*-------------------------
+      Readonly Fields
+--------------------------*/
+
+.ui.form {
+
+    textarea[readonly] {
+        cursor: @readOnlyFieldCursor;
+        background-color: @readOnlyFormFieldBgColor !important;
+    }
+
+    input[readonly] {
+        cursor: @readOnlyFieldCursor;
+        background-color: @readOnlyFormFieldBgColor !important;
+    }
+
+    .ui.read-only.checkbox ~ .box:before,
+    .ui.read-only.checkbox ~ label:before,
+    .ui.read-only.checkbox input.hidden+label:before,
+    .ui.read-only.checkbox input:checked ~ .box:before,
+    .ui.read-only.checkbox input:checked ~ label:before {
+        background-color: @readOnlyFormFieldBgColor !important;
+        cursor: @readOnlyFieldCursor;
+    }
+
+    .ui.checkbox input.hidden+label,
+    .ui.checkbox input[type=checkbox],
+    .ui.checkbox input[type=radio] {
+        cursor: @readOnlyFieldCursor;
+    }
+
+    .field.read-only .field {
+        .ui.dropdown {
+            cursor: @readOnlyFieldCursor;
+            background-color: @readOnlyFormFieldBgColor !important;
+        }
+    }
+}
+
+/*-------------------------------
+      Hidden/Disable Field
+--------------------------------*/
+
+.ui.form {
+    .field {
+        &.hidden {
+            display: none;
+        }
+
+        &.disabled {
+            opacity: 1;
+
+            >label {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+/*-------------------------------
+      Certificate Editor
+--------------------------------*/
+
+.ui.form {
+    textarea{
+        &.certificate-editor, :focus {
+            font-family: monospace;
+            line-height: 1.5em;
+            font-size: 0.9em;
+
+            &.dark {
+                color: teal;
+                background-color: #232323;
+
+                &::-webkit-resizer {
+                    background-color: #232323;
+                }
+            }
+
+            &.light {
+                color: @nobel;
+                background-color: white;
+
+                &::-webkit-resizer {
+                    background-color: white;
+                }
+            }
+
+        }
+    }
+}
+
+/*-------------------------------
+      Attributes Select
+--------------------------------*/
+.select-attribute {
+    .ui.search.selection.dropdown {
+        >.text {
+            height: 13.5px;
+            overflow: hidden;
+
+            .header {
+                font-size: 0.93rem;
+            }
+        }
+    }
+}
