@@ -8,7 +8,7 @@
  */
 
 import { TestableComponentInterface, AlertLevels, AlertInterface } from "@wso2is/core/models";
-import { CodeEditor, Heading, Text, GenericIcon } from "@wso2is/react-components";
+import { CodeEditor, Heading, GenericIcon, MessageInfo, Text } from "@wso2is/react-components";
 import React, {ChangeEvent, FunctionComponent, ReactElement, ReactNode, useState} from "react";
 import { Button, Divider, Form, Icon, InputOnChangeData, Message } from "semantic-ui-react";
 import { tomcatSAMLAgentDockerEnvCode } from "./code-blocks";
@@ -235,8 +235,9 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
                         )
                     }
 
-                    <div className="code-segment" style={ {maxWidth: "1160px"} }>
+                    <div className="code-segment">
                         <CodeEditor
+                            beautify
                             readOnly
                             withClipboardCopy
                             showLineNumbers
@@ -313,20 +314,30 @@ export const TryoutSamples: FunctionComponent<TryoutSamplesPropsInterface> = (
 
     const renderPrerequisitesStep = (): ReactElement => {
 
+        const generateContent = () => {
+            return (
+                <>
+                    <Text>
+                        You will need to have <strong>Apache Tomcat</strong> installed on
+                        your environment to try out the integration.
+                    </Text>
+                    <Text>To download <strong>Apache Tomcat</strong>, navigate to the official <a
+                        href="https://tomcat.apache.org/download-10.cgi"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link external"
+                    >downloads</a> page.
+                    </Text>
+                </>
+            );
+        };
+
         return (
             <div className="mt-3 mb-6">
-                <Heading as="h3">Prerequisite</Heading>
-                <Text>
-                    You will need to have <strong>Apache Tomcat</strong> installed on
-                    your environment to try out the integration.
-                </Text>
-                <Text>To download <strong>Apache Tomcat</strong>, navigate to the official <a
-                    href="https://tomcat.apache.org/download-10.cgi"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link external"
-                >downloads</a> page.
-                </Text>
+                <MessageInfo
+                    header={ "Prerequisite" }
+                    content={ generateContent() }
+                />
             </div>
         );
     };
