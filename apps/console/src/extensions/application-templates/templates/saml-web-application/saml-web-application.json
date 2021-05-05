@@ -1,0 +1,57 @@
+{
+    "id": "776a73da-fd8e-490b-84ff-93009f8ede85",
+    "name": "SAML",
+    "description": "Regular web application that uses redirection within the browser.",
+    "image": "saml",
+    "authenticationProtocol": "saml",
+    "types": [
+        "java"
+    ],
+    "category": "DEFAULT",
+    "displayOrder": 2,
+    "templateGroup": "web-application",
+    "application": {
+        "name": "",
+        "advancedConfigurations": {
+            "discoverableByEndUsers": false,
+            "skipLogoutConsent": true
+        },
+        "authenticationSequence": {
+            "type": "DEFAULT",
+            "steps": [
+                {
+                    "id": 1,
+                    "options": [
+                        {
+                            "idp": "LOCAL",
+                            "authenticator": "basic"
+                        }
+                    ]
+                }
+            ]
+        },
+        "inboundProtocolConfiguration": {
+            "saml": {
+                "manualConfiguration": {
+                    "issuer": "",
+                    "assertionConsumerUrls": [
+                        ""
+                    ],
+                    "singleLogoutProfile": {
+                        "enabled": true,
+                        "logoutMethod": "BACKCHANNEL",
+                        "idpInitiatedSingleLogout": {
+                            "enabled": false
+                        }
+                    }
+                },
+                "templateConfiguration": {
+                    "assertionConsumerUrls": [
+                        "http://localhost:8080/sample-app/home.jsp"
+                    ],
+                    "issuer": "sample-app"
+                }
+            }
+        }
+    }
+}

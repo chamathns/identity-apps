@@ -1,0 +1,24 @@
+/*******************************
+        Site Variables
+*******************************/
+
+/*-------------------
+     Borders
+--------------------*/
+
+@relativeBorderRadius: 4px;
+@absoluteBorderRadius: 4px;
+@defaultBorderRadius: @absoluteBorderRadius;
+
+/*-------------------
+    Site Colors
+--------------------*/
+
+@primaryColor        : #FF7300;
+@ebonyClay           : #212A32;
+
+/*-------------------
+    Color Palette
+--------------------*/
+
+@asgardeoBlack        : @ebonyClay;
