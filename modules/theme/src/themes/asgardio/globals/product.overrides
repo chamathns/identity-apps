@@ -1,0 +1,28 @@
+/*******************************
+        Product Overrides
+*******************************/
+
+.product-title {
+    .product-title-main {
+        display: flex;
+    }
+    .product-title-text {
+        margin-top: 2px !important;
+    }
+}
+
+/*******************************
+        Connector Page Layout
+*******************************/
+
+.layout {
+    &.page-layout {
+        .ui.header {
+            &.page-header {
+                &:not(.no-max-width) {
+                    max-width: 70%;
+                }
+            }
+        }
+    }
+}

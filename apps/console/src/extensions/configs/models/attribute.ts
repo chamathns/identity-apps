@@ -61,11 +61,11 @@ export interface AttributeConfig {
     localAttributes: {
         createWizard: {
             showPrimaryUserStore: boolean;
+            showOnlyMandatory: boolean;
             customWIzard: boolean;
             checkOIDCAvailability: boolean;
             checkSCIMAvailability: boolean;
             showDisplayOrder: boolean;
-            showOnlyMandatory: boolean;
             showRegularExpression: boolean;
             showReadOnlyAttribute: boolean;
             showSummary: boolean;

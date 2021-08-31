@@ -1,23 +1,18 @@
 /**
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.com). All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * This software is the property of WSO2 Inc. and its suppliers, if any.
+ * Dissemination of any information or reproduction of any material contained
+ * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
+ * You may not alter or remove any copyright or other notice from copies of this content."
  */
 
 import { CommonConfig } from "./models";
 import { HeaderExtension, HeaderLinkCategoryInterface } from "@wso2is/react-components";
+import { Menu } from "semantic-ui-react";
+import { ComponentPlaceholder } from "../extension";
+import { I18n } from "@wso2is/i18n";
+import React from "react";
 
 export const commonConfig: CommonConfig = {
     advancedSearchWithBasicFilters: {
@@ -25,13 +20,41 @@ export const commonConfig: CommonConfig = {
     },
     checkForUIResourceScopes: false,
     header: {
-        getHeaderExtensions: (): HeaderExtension[] => [],
-        getUserDropdownLinkExtensions: (): HeaderLinkCategoryInterface[] => [],
+        getHeaderExtensions: (): HeaderExtension[] => [
+            {
+                component: <ComponentPlaceholder section="tenant-dropdown" type="component"/>,
+                floated: "left"
+            }
+        ],
+        getUserDropdownLinkExtensions: (): HeaderLinkCategoryInterface[] => [
+            {
+                category: "HELP",
+                categoryLabel: null,
+                links: [
+                    {
+                        "data-testid": "help-center-doc-site-nav-link",
+                        name:  I18n.instance.t("extensions:common.help.docSiteLink"),
+                        onClick: () => {
+                            window.open(window[ "AppUtils" ].getConfig().docSiteUrl,
+                                "_blank", "noopener")
+                        }
+                    },
+                    {
+                        "data-testid": "help-center-support-portal-nav-link",
+                        name: I18n.instance.t("extensions:common.help.helpCenterLink"),
+                        onClick: () => {
+                            window.open(window[ "AppUtils" ].getConfig().helpCenterUrl,
+                                "_blank", "noopener")
+                        }
+                    }
+                ]
+            }
+        ],
         renderAppSwitcherAsDropdown: false
     },
     leftNavigation: {
         isLeftNavigationCategorized: {
-            develop: true,
+            develop: false,
             manage: true
         }
     },

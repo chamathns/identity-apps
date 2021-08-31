@@ -1,0 +1,56 @@
+/*******************************
+        Login Variables
+*******************************/
+
+/*-----------------------------
+     Login Portals Commons
+------------------------------*/
+
+@loginPortalBackgroundColor: @asgardeoBlack;
+@loginPortalBackgroundImage: url("assets/images/accounts-page-background.svg");
+@loginPortalBackgroundSize: auto;
+@loginPortalBackgroundPosition: 0 calc(100% - 39px);
+@loginPortalProductLogoHeight: 30px;
+@loginPortalLoginCardBorderRadius: 10px;
+@loginPortalSegmentBackgroundColor: @white;
+@loginPortalSegmentPrimaryActionBackgroundColor: #ff7300;
+@loginPortalExternalLinkFontSize: 14px;
+@loginPortalCenterContainer: calc(100% - 41px);
+@loginPortalClickableLinkColor: #FF8E32;
+@loginPortalGradientBackColor: #F5F6F6;
+
+@landingPageBackground: url("assets/images/landing-bg.svg");
+@landingPageBackgroundPosition: 100% calc(100% - 39px);
+
+@centeredMessageHeaderColor: @black;
+@centeredMessageDescColor: #999ea2;
+
+@loginPortalLogoTaglineMaxWidth: 570px;
+@LoginPortalRegistrationMaxWidth: 500px;
+
+@loginPortalLogoTaglineColor: #231F20;
+@loginPortalLogoTaglineFontWeight: 600;
+@loginPortalLogoTaglineFontSize: 24px;
+@loginPortalLogoTaglineFontLineHeight: 32px;
+@loginPortalLogoTaglineMarginTop: 1.9em;
+@loginPortalLogoTaglineMarginRight: 0;
+@loginPortalLogoTaglineDescriptionColor: #4e4b4b;
+@loginPortalLogoTaglineDescriptionMarginTop: 24px;
+@loginPortalLogoSecondaryTagLineColor: #FF7300;
+@loginPortalLogoSecondaryTagLineFontSize: 16px;
+@loginPortalLogoSecondaryTagLineFontWeight: 400;
+@loginPortalLogoSecondaryTagLineFontLineHeight: 3.5em;
+
+@loginPortalFooterBackground: linear-gradient(to top right, #212A32, #36414B);
+@loginPortalFooterBorderTop: 1px solid #DCDCDC;
+@loginPortalFooterHorizontalPadding: 8rem;
+@loginPortalFooterVerticalPadding: 0.3rem;
+@loginPortalFooterPadding: @loginPortalFooterVerticalPadding @loginPortalFooterHorizontalPadding;
+@loginPortalFooterLineHeight: 40px;
+
+@loginPortalAppHeaderLogoHeight: 30px;
+@loginPortalAppHeaderBackground: @asgardeoBlack;
+@loginPortalAppHeaderBorderBottom: 1px solid #454d52;
+
+@policyPageBackgroundImage: none;
+@policyPageTOCBackground: @asgardeoBlack;

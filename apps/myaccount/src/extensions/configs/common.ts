@@ -8,6 +8,7 @@
  */
 
 import { CommonConfig } from "./models";
+import { UserstoreConstants } from "../userstores/userstore-constants";
 
 export const commonConfig: CommonConfig = {
     advancedSearchWithBasicFilters: {
@@ -17,32 +18,39 @@ export const commonConfig: CommonConfig = {
         renderAppSwitcherAsDropdown: false
     },
     userProfilePage: {
-        showEmail: true
+        showEmail: false
     },
     nonLocalCredentialUser: {
-        enableNonLocalCredentialUserView: false
+        enableNonLocalCredentialUserView: true
     },
     overviewPage: {
-        enableAlternateWidgetLayout: false
+        enableAlternateWidgetLayout: true
     },
     accountSecurityPage: {
         accountRecovery: {
             emailRecovery: {
-                enableEditEmail: true
+                enableEditEmail: false
             }
         }
     },
     personalInfoPage: {
         externalLogins: {
-            disableExternalLoginsOnEmpty: false
+            disableExternalLoginsOnEmpty: true
         }
     },
     utils: {
         isManageConsentAllowedForUser(userstore: string): boolean {
+            if (userstore === UserstoreConstants.ASGARDEO_USERSTORE) {
+                return false;
+            }
             return true;
         },
-        isShowAdditionalWidgetAllowed(userstore: string): boolean {
+        isShowAdditionalWidgetAllowed(userstore:string) : boolean {
+            if (userstore === UserstoreConstants.CUSTOMER_USERSTORE) {
+                return true;
+            }
             return false;
-        }
     }
+
+}
 };

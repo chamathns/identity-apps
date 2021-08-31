@@ -1,0 +1,716 @@
+/*******************************
+    Developer Portal Overrides
+*******************************/
+
+/*-------------------------------
+            Pages
+--------------------------------*/
+
+.console-welcome-tour-wrapper {
+    color: @consoleWelcomeTourMaskBackground;
+}
+
+.console-welcome-tour {
+    text-align: @consoleWelcomeTourTextAlign;
+    min-width: @consoleWelcomeTourMinWidth !important;
+    box-shadow: @consoleWelcomeTourBoxShadow !important;
+    padding: @consoleWelcomeTourPadding !important;
+
+    -webkit-transition: none !important;
+    transition: none !important;
+
+    &-step{
+        &-description {
+            font-size: @consoleWelcomeTourStepDescriptionFontSize !important;
+            letter-spacing: @consoleWelcomeTourStepDescriptionLetterSpacing;
+            min-height: @consoleWelcomeTourStepDescriptionMinHeight;
+            line-height: @consoleWelcomeTourStepDescriptionLineHeight;
+            user-select: none;
+        }
+    }
+
+    [data-tour-elem="controls"] {
+        justify-content: center;
+
+        [data-tour-elem="navigation"] {
+            margin: 0 50px;
+
+            [data-tour-elem="dot"] {
+
+                &.reactour__dot--is-active {
+                    background: #3b4258;
+                }
+            }
+        }
+
+        [data-tour-elem="right-arrow"] {
+            margin-left: 0;
+            outline: none;
+        }
+
+        [data-tour-elem="left-arrow"] {
+            margin-right: 0;
+        }
+    }
+}
+
+.developer-portal.page {
+    &.getting-started-page {
+        max-width: @gettingStartedPageMaxWidth;
+
+        .section-card {
+            min-height: @gettingStartedPageSectionCardMinHeight;
+            padding: @gettingStartedPageSectionCardPadding;
+
+            &.auth-demo-card {
+                background-repeat: @gettingStartedPageAuthDemoCardBackgroundRepeat;
+                background-position: @gettingStartedPageAuthDemoCardBackgroundPosition;
+                background-size: @gettingStartedPageAuthDemoCardBackgroundSize;
+                background-color: @gettingStartedPageAuthDemoCardBackgroundColor;
+                background-origin: @gettingStartedPageAuthDemoCardBackgroundOrigin;
+                padding-right: @gettingStartedPageAuthDemoCardPaddingRight;
+
+                .content {
+                    .ui {
+
+                        &.header {
+                            color: #fff;
+                        }
+
+                        &.button {
+                            color: @gettingStartedPageAuthDemoCardActionColor;
+                        }
+                    }
+
+                    .text-typography {
+                        color: #fff;
+                    }
+                }
+            }
+
+            &.integration-card {
+                background-repeat: @gettingStartedPageIntegrationCardBackgroundRepeat;
+                background-position: @gettingStartedPageIntegrationCardBackgroundPosition;
+                background-color: @gettingStartedPageIntegrationCardBackgroundColor;
+                background-origin: @gettingStartedPageIntegrationCardBackgroundOrigin;
+
+                .content {
+
+                    .ui {
+
+                        &.header {
+                            color: @gettingStartedPageIntegrationCardHeaderColor;
+                        }
+
+                        &.button {
+                            color: @gettingStartedPageIntegrationCardActionColor;
+                        }
+                    }
+
+                    .text-typography {
+                        color: @gettingStartedPageIntegrationCardDescriptionColor;
+                    }
+                }
+            }
+
+            &.business-users-card {
+                background-repeat: @gettingStartedPageBusinessUsersCardBackgroundRepeat;
+                background-position: @gettingStartedPageBusinessUsersCardBackgroundPosition;
+                background-color: @gettingStartedPageBusinessUsersCardBackgroundColor;
+                background-origin: @gettingStartedPageBusinessUsersCardBackgroundOrigin;
+
+                .content {
+
+                    .ui {
+
+                        &.header {
+                            color: @gettingStartedPageBusinessUsersCardHeaderColor;
+                        }
+
+                        &.button {
+                            color: @gettingStartedPageBusinessUsersCardActionColor;
+                        }
+                    }
+
+                    .text-typography {
+                        color: @gettingStartedPageBusinessUsersCardDescriptionColor;
+                    }
+                }
+            }
+
+            &.mfa-card {
+                background-repeat: @gettingStartedPageMFACardBackgroundRepeat;
+                background-size: @gettingStartedPageMFACardBackgroundSize;
+                background-position: @gettingStartedPageMFACardBackgroundPosition;
+                background-color: @gettingStartedPageMFACardBackgroundColor;
+                background-origin: @gettingStartedPageMFACardBackgroundOrigin;
+
+                .content {
+                    margin: 0 15em 0 0;
+
+                    .ui {
+
+                        &.header {
+                            color: @gettingStartedPageMFACardHeaderColor;
+                        }
+
+                        &.button {
+                            color: @gettingStartedPageMFACardActionColor;
+                        }
+                    }
+
+                    .text-typography {
+                        color: @gettingStartedPageMFACardDescriptionColor;
+                    }
+                }
+            }
+
+            &.social-login-card {
+                background-repeat: @gettingStartedPageSocialLoginCardBackgroundRepeat;
+                background-size: @gettingStartedPageSocialLoginCardBackgroundSize;
+                background-position: @gettingStartedPageSocialLoginCardBackgroundPosition;
+                background-color: @gettingStartedPageSocialLoginCardBackgroundColor;
+                background-origin: @gettingStartedPageSocialLoginCardBackgroundOrigin;
+
+                .content {
+                    margin: 0 15em 0 0;
+
+                    .ui {
+
+                        &.header {
+                            color: @gettingStartedPageSocialLoginCardHeaderColor;
+                        }
+
+                        &.button {
+                            color: @gettingStartedPageSocialLoginCardActionColor;
+                        }
+                    }
+
+                    .text-typography {
+                        color: @gettingStartedPageSocialLoginCardDescriptionColor;
+                    }
+                }
+            }
+
+            .content.extra.action-container {
+                border-top: 0 !important;
+
+                .quick-start-action {
+                    text-align: left;
+                    padding: 8px 8px 8px 0;
+
+                    &:hover {
+                        .quick-start-action-text {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        }
+
+        .support-section {
+            display: @gettingStartedPageSupportSectionDisplay;
+
+            .icon.headphones {
+                font-size: @gettingStartedPageSupportHeadphoneIconFontSize;
+                margin: @gettingStartedPageSupportHeadphoneIconMargin;
+            }
+        }
+    }
+}
+
+.ui.button.feedback {
+    background: transparent;
+    border: @defaultBorderWidth solid @galleryGray;
+    color: @galleryGray;
+
+    &:hover {
+        background: lighten(@asgardeoBlack, 10);
+    }
+
+    .feedback-icon {
+        margin: @feedbackIconMargin;
+        display: block;
+        float: @feedbackIconFloat;
+        fill: @galleryGray;
+    }
+}
+
+/*-------------------------------
+TODO : Move values to seperate variables and cleanup styles.
+--------------------------------*/
+.product-logo {
+    margin: 2px 0 0 0 !important;
+}
+
+/*-------------------------------
+    Application Quickstart Tab
+--------------------------------*/
+
+.technology-selection-wrapper {
+    background: #3e3e3e;
+    padding: 8em 0 !important;
+
+    .heading, .new-app-greeting {
+        color: @white !important;
+    }
+
+    .text-typography {
+        color: @dustyGray !important;
+    }
+
+    .custom-configuration {
+        margin: auto;
+        width: 500px;
+    }
+}
+
+.application-sample-config-editor {
+    .CodeMirror {
+        min-height: @applicationSampleConfigEditorMinHeight;
+        height: @applicationSampleConfigEditorHeight;
+    }
+}
+
+.code-block {
+    border-radius: @defaultBorderRadius;
+
+    &.command {
+        &.dark {
+            color: @darkCodeBlockColor;
+            background-color: @darkCodeBlockBgColor;
+        }
+    }
+}
+
+.download-illustration {
+    justify-content: left;
+}
+
+.tech-selection-cards {
+    .tech-selection {
+        &:not(:last-child) {
+            margin-right: 3em !important;
+        }
+    }
+}
+
+.tech-selection {
+    background: darken(@nobel, 20) !important;
+    border-color: @nobel !important;
+    transition: none !important;
+    min-width: 125px;
+    padding: 1em !important;
+
+    svg {
+        height: 50px;
+        width: 50px;
+    }
+
+    .description {
+        font-size: 1.4em;
+        color: @white !important;
+    }
+
+    &:hover {
+        transform: none !important;
+        border: 1px solid lighten(@nobel, 20) !important;
+        background: @nobel !important;
+        box-shadow: none !important;
+        text-decoration: none !important;
+    }
+
+    &.selected {
+        background-color: lighten(@primaryColor, 40) !important;
+        border: 1px solid @primaryColor !important;
+    }
+    &.disabled {
+        cursor: not-allowed !important;
+    }
+}
+
+.code-segment {
+    border: 1px solid @defaultBorderColor;
+
+    .tab {
+        border-right: 1px solid @defaultBorderColor !important;
+        border-left: 1px solid @defaultBorderColor !important;
+    }
+
+    .item {
+        padding: 1.5em !important;
+    }
+
+    .CodeMirror-sizer {
+        max-width: 80vw !important;
+    }
+}
+
+.quick-start-step-container {
+    counter-reset: my-sec-counter;
+    position: relative;
+
+    .step-content {
+
+        .step-previous {
+            border: none !important;
+            outline: none;
+            background: none;
+        }
+
+        .code-segment {
+            position:relative;
+
+            .action-buttons {
+                position: absolute;
+                right: 1em;
+                z-index: 100;
+
+                button {
+                    margin: 1em 1em 1em 0;
+                    float: right;
+                }
+
+                .copy-config {
+                    visibility: hidden;
+                }
+            }
+
+            &:hover {
+                .action-buttons {
+                    .copy-config {
+                        visibility: visible;
+                    }
+                }
+            }
+        }
+
+        .secondary.menu {
+            margin: 0 !important;
+        }
+
+        .segment.tab{
+            padding: 0 !important;
+        }
+
+        .message {
+            p {
+                line-height: 2.5em;
+            }
+
+            &::after {
+                content: "";
+                clear: both;
+                display: block;
+            }
+        }
+
+        .sample-action-button {
+            line-height: 2.5em;
+
+            &.download {
+                background-color: @white !important;
+            }
+
+            &.github {
+                &:hover {
+                    background-color: lighten(@galleryGray, 5) !important;
+                }
+            }
+        }
+    }
+
+    .step-content-container {
+        padding-left: @quickStartStepPaddingLeft;
+        margin-top: @quickStartStepMarginTop;
+    }
+
+    .quick-start-step {
+        line-height: 28px;
+        position: relative;
+
+        &.initial {
+            height: 70px;
+            &:before {
+                background-color: #C3C3C3 !important;
+            }
+
+            .step-content {
+                height: 1.5em;
+                visibility: hidden !important;
+            }
+        }
+
+        &.complete {
+            height: 70px;
+            &::before {
+                -ms-transform: scaleX(-1) rotate(-35deg)!important;
+                -webkit-transform: scaleX(-1) rotate(-35deg)!important;
+                transform: scaleX(-1) rotate(-44deg)!important;
+                content: "L"!important;
+                font-size: 1.2em!important;
+                line-height: 1.9em !important;
+            }
+            .step-content {
+                visibility: hidden !important;
+                height: 2em !important;
+            }
+        }
+    }
+
+    .quick-start-step::before {
+        counter-increment: my-sec-counter;
+        content: counter(my-sec-counter);
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin: 0 15px 0 0;
+        border-radius: 100%;
+        text-align: center;
+        background-color: @nobel;
+        color: #fff;
+        line-height: 2.1em;
+    }
+
+    .quick-start-step::after {
+        width: 1px;
+        height: 100%;
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 1%;
+        bottom: 0;
+        left: 14px;
+        border-left: 2px dashed @defaultBorderColor;
+    }
+
+    .quick-start-step:last-child::after {
+        border:none !important;
+    }
+}
+
+
+/* Computer */
+@media only screen and (max-width: @largeMonitorBreakpoint) {
+    .developer-portal.page {
+        &.getting-started-page {
+            .ui.grid>.row>[class*="sixteen wide"].column {
+                &.stackable {
+                    &:not(:first-child) {
+                        padding-top: @gettingStartedPageStackableGridColumnsPaddingTop;
+                    }
+                    &:not(:last-child) {
+                        padding-bottom: @gettingStartedPageStackableGridColumnsPaddingBottom;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 485px) {
+    .developer-portal.page {
+        &.getting-started-page {
+            .section-card {
+                background-image: @gettingStartedPageSectionCardsMobileScreenBackgroundImage;
+            }
+        }
+    }
+}
+
+@media (max-width: @tabletBreakpoint) and (min-width: 485px) {
+    .developer-portal.page {
+        &.getting-started-page {
+            .section-card {
+                .content {
+                    width: 60% !important;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: @computerBreakpoint) {
+    .code-segment  {
+        .CodeMirror-sizer {
+            max-width: 65vw !important;
+        }
+    }
+}
+
+@media only screen and (max-width: @computerBreakpoint) and (min-width: @tabletBreakpoint) {
+    .code-segment  {
+        .CodeMirror-sizer {
+            max-width: 55vw !important;
+        }
+    }
+}
+
+.invite-button {
+  text-align: right;
+}
+
+.message-info-text {
+    margin-bottom: 0px !important;
+}
+
+/*-------------------------------
+    Application Tabs common
+--------------------------------*/
+
+.ui.segment {
+    &.user-role-edit-header-segment {
+        &.attributes {
+            padding: 0;
+            overflow: auto
+        }
+    }
+    .subject-attribute-selection {
+        .ui.dropdown {
+            &.selection {
+                line-height: @applicationListItemLineHeight;
+            }
+            .menu {
+                .item {
+                    line-height: @applicationListItemLineHeight;
+                }
+            }
+            .dropdown {
+                &.icon {
+                    margin: auto !important;
+                }
+            }
+        }
+    }
+}
+
+.ui.card {
+    &.selection-card {
+        &.radio-selection-card {
+            &.quickstart-mode-card {
+                .selection-card-content {
+                    .card-content {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        .header {
+                            line-height: @quickStartCardTitleHeight;
+                        }
+                        .meta {
+                           line-height: @quickStartCardContentHeight;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*-------------------------------
+           Checkbox
+--------------------------------*/
+
+.ui.checkbox {
+    &.read-only {
+        opacity: @checkboxDisabledOpacity;
+
+        label {
+            cursor: default !important;
+        }
+    }
+}
+
+/*-------------------------------
+           Help & Support
+--------------------------------*/
+
+.help-center-button-wrapper {
+    .help-center-button {
+        .help-center-button-icon {
+            margin: 0;
+            color: @helpCenterButtonIconColor;
+        }
+    }
+}
+
+/*-------------------------------
+    Add Guest User Wizard
+--------------------------------*/
+
+.invite-sub-heading {
+  color: #797979 !important;
+}
+
+/*-------------------------------
+    Add User Step
+--------------------------------*/
+
+.add-user-step {
+    .add-user-step-list {
+        margin: 0;
+
+        .list-item {
+            margin-top: 5px;
+        }
+        .list-item:first-child {
+            margin-top: 15px;
+        }
+
+        .list-icon {
+            margin-right: 3px;
+        }
+    }
+}
+
+.ui.info.message {
+    &.add-user-info {
+        .text-typography {
+            color: unset !important;
+        }
+    }
+}
+
+/*-----------------------------------
+    Governance Connector Settings
+------------------------------------*/
+
+.connector-heading-icon {
+  font-size: 1em !important;
+}
+
+.connector-form {
+    .ui.grid {
+        .row {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+}
+
+/*---------------------------------------
+     Authenticator Quick Start Styles
+----------------------------------------*/
+
+.authenticator-quickstart-content {
+    margin-left: 0;
+
+    .authenticator-quickstart-illustration {
+        img {
+            width: 100%;
+        }
+    }
+}
+
+/*---------------------------------------
+     Authenticator Quick Start Styles
+----------------------------------------*/
+
+.authenticator-quickstart-content {
+    margin-left: 0;
+
+    .authenticator-quickstart-illustration {
+        img {
+            width: 100%;
+        }
+    }
+}

@@ -21,21 +21,21 @@ import { UserstoresConfig } from "./models";
 export const userstoresConfig: UserstoresConfig = {
     userstoreEdit: {
         basicDetails: {
-            showType: true
+            showType: false
         },
         groupDetails: {
-            showAdditionalProperties: true,
-            showToggles: true
+            showAdditionalProperties: false,
+            showToggles: false
         },
         userDetails: {
-            showAdditionalProperties: true,
-            showDisplayName: true
+            showAdditionalProperties: false,
+            showDisplayName: false
         }
     },
     userstoreList: {
-        allowAddingUserstores: true
+        allowAddingUserstores: false
     },
     userstoreDomain: {
-        appendToUsername: true
+        appendToUsername: false
     }
 };
