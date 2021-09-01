@@ -1,6 +1,7 @@
 {
     "accountApp": {
-        "path": "/myaccount/overview",
+        "origin": "https://dev.myaccount.asgardeo.io",
+        "path": "/overview",
         "skipTenant": true,
         "useCommonPostLogoutUrl": true
     },
