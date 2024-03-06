@@ -1,0 +1,71 @@
+import React, { FunctionComponent, ReactElement, useState } from "react";
+import Button from "@oxygen-ui/react/Button";
+
+import { Input, Segment, Header, Icon } from "semantic-ui-react";
+import { LinkButton } from "../button";
+
+interface BrandingAIComponentProps {
+    // You can extend this interface to include other props as needed.
+}
+
+export const BrandingAIComponent: FunctionComponent<BrandingAIComponentProps> = (
+    props: BrandingAIComponentProps
+): ReactElement => {
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    const [websiteUrl, setWebsiteUrl] = useState<string>("");
+
+    const handleExpandClick = () => {
+        setIsExpanded(true);
+    };
+
+    const handleCollapseClick = () => {
+        setIsExpanded(false);
+    };
+
+    const handleGenerateClick = () => {
+        console.log("Generating branding for:", websiteUrl);
+    };
+
+    return (
+        <Segment>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                    <Header as="h3">{isExpanded ? "Generate branding using Branding AI" : "Generate branding with a single click using Branding AI"}</Header>
+                    <p>{isExpanded ? "Provide your organization website URL to intuitively generate branding reflecting the essence of your brand." : "AI-powered branding recommendations that are crafted for a unified visual approach. Learn More"}</p>
+                </div>
+                {!isExpanded && (
+                    <Button onClick={handleExpandClick}
+                        color="secondary"
+                        variant="outlined"
+                    >
+                        Try Branding AI
+                    </Button>
+                )}
+                {isExpanded && (
+                    <Icon name="dropdown" onClick={handleCollapseClick} style={{ cursor: 'pointer' }} />
+                )}
+            </div>
+            {isExpanded && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                <Input
+                    placeholder="Enter website URL"
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                    style={{ width: '40%' }}
+                />
+                <Button
+                    onClick={handleGenerateClick}
+                    color="secondary"
+                    variant="outlined"
+                >
+                    Generate Branding
+                </Button>
+            </div>
+            )}
+        </Segment>
+    );
+};
+
+BrandingAIComponent.defaultProps = {
+    // Define any default props here.
+};
