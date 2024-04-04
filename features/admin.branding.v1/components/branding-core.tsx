@@ -63,7 +63,10 @@ import { BrandingPreferenceUtils } from "../utils";
 /**
  * Prop-types for the branding core component.
  */
-type BrandingCoreInterface = IdentifiableComponentInterface;
+interface BrandingCoreInterface extends IdentifiableComponentInterface {
+
+    brandingPreference?: BrandingPreferenceInterface;
+}
 
 /**
  * Branding core.
@@ -76,6 +79,7 @@ const BrandingCore: FunctionComponent<BrandingCoreInterface> = (
 ): ReactElement => {
 
     const {
+        brandingPreference: overridenBrandingPreference,
         ["data-componentid"]: componentId
     } = props;
 
@@ -184,6 +188,15 @@ const BrandingCore: FunctionComponent<BrandingCoreInterface> = (
             ...BrandingPreferenceMeta.getLayouts()
         });
     }, []);
+
+    useEffect(() => {
+
+        if (overridenBrandingPreference) {
+            console.log("Overriden branding preference detected. Overriding the default preference.");
+            console.log("Overriden preference: ", overridenBrandingPreference);
+            setBrandingPreference(overridenBrandingPreference);
+        }
+    }, [ overridenBrandingPreference ]);
 
     useEffect(() => {
         setShowResolutionDisclaimerMessage(
