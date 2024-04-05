@@ -190,15 +190,6 @@ const BrandingCore: FunctionComponent<BrandingCoreInterface> = (
     }, []);
 
     useEffect(() => {
-
-        if (overridenBrandingPreference) {
-            console.log("Overriden branding preference detected. Overriding the default preference.");
-            console.log("Overriden preference: ", overridenBrandingPreference);
-            setBrandingPreference(overridenBrandingPreference);
-        }
-    }, [ overridenBrandingPreference ]);
-
-    useEffect(() => {
         setShowResolutionDisclaimerMessage(
             BrandingPreferenceUtils.isLayoutPreviewTrimmed(selectedLayout, currentWidth)
         );
@@ -232,18 +223,21 @@ const BrandingCore: FunctionComponent<BrandingCoreInterface> = (
             setIsBrandingConfigured(true);
         }
 
-        setBrandingPreference(BrandingPreferenceUtils.migrateLayoutPreference(
-            BrandingPreferenceUtils.migrateThemePreference(
-                originalBrandingPreference.preference,
+        if (!brandingPreference) {
+            setBrandingPreference(BrandingPreferenceUtils.migrateLayoutPreference(
+                BrandingPreferenceUtils.migrateThemePreference(
+                    originalBrandingPreference.preference,
+                    {
+                        theme: predefinedThemes
+                    }
+                ),
                 {
-                    theme: predefinedThemes
+                    layout: predefinedLayouts
                 }
-            ),
-            {
-                layout: predefinedLayouts
-            }
-        ));
-        setSelectedLayout(originalBrandingPreference.preference.layout.activeLayout);
+            ));
+            setSelectedLayout(originalBrandingPreference.preference.layout.activeLayout);
+        }
+
     }, [ originalBrandingPreference ]);
 
     /**
@@ -294,6 +288,22 @@ const BrandingCore: FunctionComponent<BrandingCoreInterface> = (
                 // Tracked here https://github.com/wso2/product-is/issues/11650.
             });
     }, [ theme ]);
+
+
+    useEffect(() => {
+
+        if (overridenBrandingPreference) {
+
+            console.log("Overriden branding preference detected. Overriding the default preference.");
+
+            console.log("Original preference: ", brandingPreference);
+            console.log("Overriden preference: ", overridenBrandingPreference);
+
+            setBrandingPreference(overridenBrandingPreference);
+
+            debugger;
+        }
+    }, [ overridenBrandingPreference ]);
 
     /**
      * Handles preference form submit action.
