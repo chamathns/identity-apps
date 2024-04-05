@@ -26,49 +26,55 @@ import { useTranslation } from "react-i18next";
 import { ReactComponent as LoadingPlaceholder }
     from "../../../modules/theme/src/themes/wso2is/assets/images/branding/ai-loading-screen-placeholder.svg";
 
-export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element => {
+const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element => {
     const { t } = useTranslation();
     const [ currentStatus, setCurrentStatus ] = useState("Initializing...");
     const [ progress, setProgress ] = useState(0);
     const [ factIndex, setFactIndex ] = useState(0);
     const facts: string[] = [
-        t("branding:ai.screens.loading.facts.0"),
-        t("branding:ai.screens.loading.facts.1"),
-        t("branding:ai.screens.loading.facts.2")
+        t("ai:screens.loading.facts.0"),
+        t("ai:screens.loading.facts.1"),
+        t("ai:screens.loading.facts.2"),
     ];
     const [ polling, setPolling ] = useState(true);
 
     const statusSequence: string[] = [
-        "render_webpage",
-        "extract_webpage_content",
-        "webpage_extraction_completed",
-        "generate_branding",
-        "color_palette",
-        "style_properties",
-        "create_branding_theme",
-        "branding_generation_completed"
+        "optimizing_and_validating_user_query",
+        "optimization_and_validation_complete",
+        "retrieving_examples",
+        "retrieval_of_examples_complete",
+        "generating_login_flow_script",
+        "generation_of_login_flow_script_complete",
+        "generating_login_flow_authenticators",
+        "generation_of_login_flow_authenticators_complete",
+        "optimizing_and_validating_final_login_flow",
+        "login_flow_generation_complete"
     ];
 
     const statusLabels: Record<string, string> = {
-        branding_generation_completed: t("branding:ai.screens.loading.states.8"),
-        color_palette: t("branding:ai.screens.loading.states.5"),
-        create_branding_theme: t("branding:ai.screens.loading.states.7"),
-        extract_webpage_content: t("branding:ai.screens.loading.states.2"),
-        generate_branding: t("branding:ai.screens.loading.states.4"),
-        render_webpage: t("branding:ai.screens.loading.states.1"),
-        style_properties: t("branding:ai.screens.loading.states.6"),
-        webpage_extraction_completed: t("branding:ai.screens.loading.states.3")
+        optimizing_and_validating_user_query: t("ai:screens.loading.states.1"),
+        optimization_and_validation_complete: t("ai:screens.loading.states.2"),
+        retrieving_examples: t("ai:screens.loading.states.3"),
+        retrieval_of_examples_complete: t("ai:screens.loading.states.4"),
+        generating_login_flow_script: t("ai:screens.loading.states.5"),
+        generation_of_login_flow_script_complete: t("ai:screens.loading.states.6"),
+        generating_login_flow_authenticators: t("ai:screens.loading.states.7"),
+        generation_of_login_flow_authenticators_complete: t("ai:screens.loading.states.8"),
+        optimizing_and_validating_final_login_flow: t("ai:screens.loading.states.9"),
+        login_flow_generation_complete: t("ai:screens.loading.states.10")
     };
 
     const statusProgress: Record<string, number> = {
-        branding_generation_completed: 100,
-        color_palette: 75,
-        create_branding_theme: 97,
-        extract_webpage_content: 25,
-        generate_branding: 50,
-        render_webpage: 10,
-        style_properties: 95,
-        webpage_extraction_completed: 30
+        optimizing_and_validating_user_query: 10,
+        optimization_and_validation_complete: 20,
+        retrieving_examples: 25,
+        retrieval_of_examples_complete: 40,
+        generating_login_flow_script: 45,
+        generation_of_login_flow_script_complete: 70,
+        generating_login_flow_authenticators: 75,
+        generation_of_login_flow_authenticators_complete: 95,
+        optimizing_and_validating_final_login_flow: 97,
+        login_flow_generation_complete: 100
     };
 
     const initialProgress: number = 5;
@@ -96,34 +102,41 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
     const fetchProgress = async () => {
         try {
             const response: AxiosResponse<any> = await axios.get(
-                // "http://0.0.0.0:8080/t/cryd1/api/server/v1/branding-preference/generate",
-                "http://localhost:3000/status",
+                "http://0.0.0.0:8081/loginflow/status",
                 { headers: { "trace-id": traceId } }
             );
-
             // const response = await axios.get('http://localhost:3000/status', { headers: { 'trace-id': 'custom' } });
             return response.data.status;
         } catch (error) {
+            console.log("error",error);
+            console.log("error.reponse",error.response);
             if (
                 error.response &&
                 error.response.status === 404 &&
-                error.response.data.detail === "No branding request found with the provided tracking reference."
+                error.response.data.detail === "No login flow generation request with the provided tracking reference."
             ) {
-                setProgress(100);
 
-                return { branding_generation_completed: true };
+                return {optimizing_and_validating_user_query: true,
+                        optimization_and_validation_complete: true,
+                        retrieving_examples: true,
+                        retrieval_of_examples_complete: true,
+                        generating_login_flow_script: true,
+                        generation_of_login_flow_script_complete: true,
+                        generating_login_flow_authenticators: true,
+                        generation_of_login_flow_authenticators_complete: true,
+                        optimizing_and_validating_final_login_flow: true,
+                        login_flow_generation_complete: true};
             }
         }
     };
 
     const updateProgress = (fetchedStatus: Record<string, any>) => {
-        let latestCompletedStep: string = t("branding:ai.screens.loading.states.0");
+        let latestCompletedStep: string = t("ai:screens.loading.states.0");
         let currentProgress: number = 0;
 
         statusSequence.forEach((key: string) => {
             if (
-                fetchedStatus[key] ||
-                (fetchedStatus.branding_generation_status && fetchedStatus.branding_generation_status[key])
+                fetchedStatus[key]
             ) {
                 latestCompletedStep = statusLabels[key];
                 currentProgress = statusProgress[key];
@@ -147,35 +160,32 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
             }, 100);
         }
 
-        if (fetchedStatus.branding_generation_completed) {
-            clearInterval(interval);
-        }
         setCurrentStatus(latestCompletedStep);
 
-        if (fetchedStatus.branding_generation_completed) {
+        if (fetchedStatus.login_flow_generation_complete) {
             setProgress(100);
-            setCurrentStatus(statusLabels["branding_generation_completed"]);
+            clearInterval(interval);
             setPolling(false);
+            // Issue : polling timing doesn't match with the status update timing.
+            // Response is generated and the loading screen is leaved before completing.
         }
     };
 
     useEffect(() => {
-        if (!polling) return;
+        let interval: NodeJS.Timeout;
 
-        const interval: NodeJS.Timeout = setInterval(async () => {
-            const fetchedStatus: Record<string, any> = await fetchProgress();
-
-            updateProgress(fetchedStatus);
-        }, 1000);
+        if (polling) {
+            interval = setInterval(async () => {
+                const fetchedStatus: Record<string, any> = await fetchProgress();
+                updateProgress(fetchedStatus);
+            }, 1000);
+        } else {
+            clearInterval(interval);
+        }
 
         return () => clearInterval(interval);
     }, [ polling ]);
 
-    useEffect(() => {
-        if (progress === 100) {
-            setPolling(false);
-        }
-    }, [ progress ]);
 
     useEffect(() => {
         const interval: NodeJS.Timeout = setInterval(() => {
@@ -185,49 +195,8 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
         return () => clearInterval(interval);
     }, [ factIndex ]);
 
-    // return (
-    //     <Box className="loading-screen-container">
-    //         <Box className="loading-screen-content">
-    //             <Box className="loading-screen-row">
-    //                 <Box className="loading-screen-facts">
-    //                     <Box className="loading-screen-facts-content">
-    //                         <Typography variant="h5" className="loading-screen-facts-text">
-    //                             Did you know?
-    //                         </Typography>
-    //                         <Typography
-    //                             variant="body1"
-    //                             align="justify"
-    //                             className="loading-screen-facts-detail">
-    //                             { facts[factIndex] }
-    //                         </Typography>
-    //                     </Box>
-    //                 </Box>
-    //                 <Box className="loading-screen-placeholder">
-    //                     <LoadingPlaceholder />
-    //                 </Box>
-    //             </Box>
-    //             <Box className="loading-screen-progress">
-    //                 <LinearProgress variant="determinate" value={ progress } />
-    //             </Box>
-    //             <Box className="loading-screen-status">
-    //                 { polling && <CircularProgress size={ 20 } className="loading-screen-status-progress" /> }
-    //                 <Typography variant="h6">
-    //                     { currentStatus }
-    //                 </Typography>
-    //             </Box>
-    //         </Box>
-    //     </Box>
-    // );
-
-
     return (
-        // <Box className="loading-screen-container">
-        <Box
-            sx={ {
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "center"
-            } }>
+        <Box sx={ { alignItems: "center", display: "flex", justifyContent: "center" } }>
             <Box sx={ { alignItems: "center", display: "flex", flexDirection: "column", width: "75%" } }>
                 <Box
                     sx={ {
@@ -278,5 +247,5 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
             </Box>
         </Box>
     );
-
 };
+export default LoadingScreen;

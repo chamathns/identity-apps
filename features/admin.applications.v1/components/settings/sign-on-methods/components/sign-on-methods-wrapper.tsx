@@ -17,20 +17,20 @@
  */
 
 import { IdentifiableComponentInterface, SBACInterface } from "@wso2is/core/models";
-import React, { FunctionComponent, ReactElement } from "react";
-import { SignOnMethodsWrapper } from "./components/sign-on-methods-wrapper";
-import { FeatureConfigInterface } from "../../../../admin.core.v1";
+import React, { FunctionComponent, ReactElement, useContext, useState, useEffect } from "react";
+import { SignOnMethodsCore } from "./sign-on-methods-core";
+import { FeatureConfigInterface } from "../../../../../admin.core.v1";
 import {
     ApplicationInterface,
     AuthenticationSequenceInterface
-} from "../../../models";
-import AILoginFlowProvider from "../../../../admin.ai.v1/providers/login-flow-provider";
-
+} from "../../../../models";
+import useGetModifiedLoginFLow from "../../../../../admin.ai.v1/hooks/use-get-modified-login-flow";
+import AILoginFlowContext from "../../../../../admin.ai.v1/context/login-flow-context";
 /**
  * Proptypes for the sign on methods component.
  */
 
-interface SignOnMethodsPropsInterface extends SBACInterface<FeatureConfigInterface>, IdentifiableComponentInterface {
+interface SignOnMethodsWrapperPropsInterface extends SBACInterface<FeatureConfigInterface>, IdentifiableComponentInterface {
     /**
      * Editing application.
      */
@@ -77,8 +77,8 @@ interface SignOnMethodsPropsInterface extends SBACInterface<FeatureConfigInterfa
  *
  * @returns React element.
  */
-export const SignOnMethods: FunctionComponent<SignOnMethodsPropsInterface> = (
-    props: SignOnMethodsPropsInterface
+export const SignOnMethodsWrapper: FunctionComponent<SignOnMethodsWrapperPropsInterface> = (
+    props: SignOnMethodsWrapperPropsInterface
 ): ReactElement => {
 
     const {
@@ -93,13 +93,17 @@ export const SignOnMethods: FunctionComponent<SignOnMethodsPropsInterface> = (
         hiddenAuthenticators,
         [ "data-componentid" ]: componentId
     } = props;
+    
+    /**
+     * Get the AI generated login flow if available.
+     */
+    const modifiedAuthenticatinSequence = useGetModifiedLoginFLow(authenticationSequence);
 
     return (
-        <AILoginFlowProvider>
-            <SignOnMethodsWrapper
+            <SignOnMethodsCore
                 application={ application }
                 appId={ appId }
-                authenticationSequence={ authenticationSequence }
+                authenticationSequence={ modifiedAuthenticatinSequence }
                 clientId={ clientId }
                 isLoading={ isLoading }
                 onUpdate={ onUpdate }
@@ -110,13 +114,12 @@ export const SignOnMethods: FunctionComponent<SignOnMethodsPropsInterface> = (
 
 
             />
-        </AILoginFlowProvider>
     );
 };
 
 /**
  * Default props for the application sign-on-methods component.
  */
-SignOnMethods.defaultProps = {
+SignOnMethodsWrapper.defaultProps = {
     "data-componentid": "sign-on-methods"
 };
