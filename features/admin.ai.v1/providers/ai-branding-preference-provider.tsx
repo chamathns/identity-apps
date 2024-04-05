@@ -55,6 +55,7 @@ const AIBrandingPreferenceProvider: FunctionComponent<AIBrandingPreferenceProvid
     const [ progress, setProgress ] = useState(0);
     const [ isGeneratingBranding, setGeneratingBranding ] = useState(false);
     const [ mergedBrandingPreference, setMergedBrandingPreference ] = useState<BrandingPreferenceInterface>(null);
+    const [ operationId, setOperationId ] = useState<string>(null);
 
     function removeEmptyKeys(obj: Record<string, any>): Record<string, any> {
         return transform(obj, (result: Record<string, any>, value: any, key: string) => {
@@ -110,8 +111,10 @@ const AIBrandingPreferenceProvider: FunctionComponent<AIBrandingPreferenceProvid
                 handleGenerate,
                 isGeneratingBranding,
                 mergedBrandingPreference,
+                operationId,
                 setCurrentStatus,
-                setGeneratingBranding
+                setGeneratingBranding,
+                setOperationId
             } }
         >
             { children }

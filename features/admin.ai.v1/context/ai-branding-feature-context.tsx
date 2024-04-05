@@ -40,6 +40,9 @@ export interface AIBrandingFeatureContextProps {
     isGeneratingBranding: boolean;
 
     setGeneratingBranding: (status: boolean) => void;
+
+    operationId: string;
+    setOperationId: (id: string) => void;
 }
 
 /**

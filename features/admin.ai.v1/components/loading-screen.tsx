@@ -21,12 +21,13 @@ import CircularProgress from "@oxygen-ui/react/CircularProgress";
 import LinearProgress from "@oxygen-ui/react/LinearProgress";
 import Typography from "@oxygen-ui/react/Typography";
 import axios, { AxiosResponse } from "axios";
+import useAIBrandingPreference from "features/admin.ai.v1/hooks/use-ai-branding-preference";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as LoadingPlaceholder }
     from "../../../modules/theme/src/themes/wso2is/assets/images/branding/ai-loading-screen-placeholder.svg";
 
-export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element => {
+export const LoadingScreen = ( { traceId, operationId }: { traceId: string, operationId: string } ): JSX.Element => {
     const { t } = useTranslation();
     const [ currentStatus, setCurrentStatus ] = useState("Initializing...");
     const [ progress, setProgress ] = useState(0);
@@ -36,7 +37,14 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
         t("branding:ai.screens.loading.facts.1"),
         t("branding:ai.screens.loading.facts.2")
     ];
-    const [ polling, setPolling ] = useState(true);
+
+    const { handleGenerate,
+        isGeneratingBranding,
+        mergedBrandingPreference,
+        setGeneratingBranding,
+         } = useAIBrandingPreference();
+
+    const [ polling, setPolling ] = useState(isGeneratingBranding);
 
     const statusSequence: string[] = [
         "render_webpage",
@@ -95,10 +103,11 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
 
     const fetchProgress = async () => {
         try {
+            console.log("operationId loading screen: ", operationId);
             const response: AxiosResponse<any> = await axios.get(
-                // "http://0.0.0.0:8080/t/cryd1/api/server/v1/branding-preference/generate",
-                "http://localhost:3000/status",
-                { headers: { "trace-id": traceId } }
+                `http://0.0.0.0:8080/t/cryd1/api/server/v1/branding-preference/status/${operationId}`,
+                // "http://localhost:3000/status",
+                { headers: { "correlation-id": traceId } }
             );
 
             // const response = await axios.get('http://localhost:3000/status', { headers: { 'trace-id': 'custom' } });
@@ -155,6 +164,7 @@ export const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element =
         if (fetchedStatus.branding_generation_completed) {
             setProgress(100);
             setCurrentStatus(statusLabels["branding_generation_completed"]);
+            console.log("######Branding generation completed######");
             setPolling(false);
         }
     };
