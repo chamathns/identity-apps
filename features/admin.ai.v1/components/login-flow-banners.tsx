@@ -21,7 +21,7 @@ import Button from "@oxygen-ui/react/Button";
 import { DocumentationLink, GenericIcon } from "@wso2is/react-components";
 import React, { ReactElement, useContext, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Header, Segment, TextArea } from "semantic-ui-react";
+import { Header, Icon, Segment, TextArea } from "semantic-ui-react";
 import { ReactComponent as AIIcon }
     from "../../../modules/theme/src/themes/wso2is/assets/images/icons/solid-icons/twinkle-ai-solid.svg";
 import AILoginFlowContext from "../context/login-flow-context";
@@ -72,6 +72,7 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
         e.preventDefault();
         const formData = new FormData(e.target);
         const loginFlowInput = formData.get("loginFlowInput").toString();
+
         // const loginFlowInput = "I'm setting up a two-step login process. First, all users enter their username and password. If the user is a manager, they're then asked for a TOTP code from their authenticator app. If they're not a manager, they skip this step and go straight in after entering their password."
         onGenerateClick(loginFlowInput);
 
@@ -97,17 +98,16 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
                     alignItems: "center",
                     display: "flex",
                     justifyContent: "space-between",
-                    padding: "45px",
-                    height: "100%",
-                    position: "relative"
+                    padding: "45px"
                 } }>
                 <div>
                     <Header as="h3">
                         { t("ai:banner.full.heading") }
                     </Header>
                     <p>
-                        { t("ai:banner.full.subheading1") }<br />
-                        { t("ai:banner.full.subheading2") }
+                        Input your preferred login sequence, and our AI will
+                        analyze your authenticators and context to configure the flow accordingly.<br />
+                        { /* { t("ai:banner.full.subheading2") } */ }
                     </p>
                 </div>
                 <Button onClick={ handleTryLoginFlowButtonClick } color="secondary" variant="outlined">
@@ -120,59 +120,45 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
 
     // Input Banner.
     const InputBanner = () => (
-        <Segment
-            basic
-            style={ {
-                background: "white",
-                borderRadius: "8px"
-            } }
-        >
+        <Segment>
             <div
                 style={ {
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
-                    padding: "25px",
                     position: "relative"
                 } }>
+                <Icon
+                    name="dropdown"
+                    onClick={ handleBannerCollapseButtonClick }
+                    style={ {
+                        cursor: "pointer",
+                        position: "absolute",
+                        right: "0",
+                        top: "0"
+                    } }
+                />
                 <div
                     style={ {
                         display: "flex",
+                        flexDirection: "column",
                         justifyContent: "space-between",
-                        alignItems: "center"
+                        padding: "10px"
                     } }>
-                    <button
-                        onClick={ handleBannerCollapseButtonClick }
-                        style={ {  backgroundColor: "transparent",
-                            position: "absolute",
-                            right: "0px",
-                            top: "0px",
-                            padding:"10px 20px",
-                            border: "none",
-                            cursor: "pointer" } }>
-                        <ChevronUpIcon />
-                    </button>
-                    <Header as="h3">{ t("ai:banner.input.heading") }</Header>
-
-                </div>
-
-
-                <div
-                    style={ {
-                        marginTop: "5px",
-                        marginBottom: "10px"
-
-                    } }>
-                    <p>
-                        { t("ai:banner.input.subheading") }
-                        <DocumentationLink
-                            link={ "develop.applications.editApplication.asgardeoTryitApplication.general.learnMore" }
-                            isLinkRef={ true }>
-                            <Trans i18nKey={ "extensions:common.learnMore" }>
+                    <div>
+                        <Header as="h3" style={ { marginBottom: "5px" } }>{ t("ai:banner.input.heading") }</Header>
+                        <p>
+                            { t("ai:banner.input.subheading") }
+                            <DocumentationLink
+                                link={ "develop.applications.editApplication.asgardeoTryitApplication.general.learnMore" }
+                                isLinkRef={ true }>
+                                <Trans i18nKey={ "extensions:common.learnMore" }>
                                 Learn more
-                            </Trans>
-                        </DocumentationLink>
-                    </p>
+                                </Trans>
+                            </DocumentationLink>
+                        </p>
+                    </div>
+
                 </div>
                 <form onSubmit={ handleGenerateButtonClick }>
                     <div
