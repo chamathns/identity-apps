@@ -48,7 +48,7 @@ export const BrandingAIBanner: FunctionComponent<BrandingAIBannerProps> = (
 
     const { t } = useTranslation();
     const [ bannerState, setBannerState ] = useState<BannerState>(BannerState.Full);
-    const [ websiteUrl, setWebsiteUrl ] = useState<string>("");
+    const [ websiteUrl, setWebsiteUrl ] = useState<string>("https://www.dialog.lk/");
 
     const { handleGenerate,
         isGeneratingBranding,
@@ -85,8 +85,7 @@ export const BrandingAIBanner: FunctionComponent<BrandingAIBannerProps> = (
             console.log("Operation id branding card:", operationId);
             setOperationId(operationId);
             onGenerateBrandingClick(traceId, operationId);
-            // debugger;
-            // setGeneratingBranding(true);
+            setGeneratingBranding(true);
         } catch (error) {
             // console.error("Error:", error);
         }

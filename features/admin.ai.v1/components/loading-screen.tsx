@@ -29,7 +29,7 @@ import { ReactComponent as LoadingPlaceholder }
 
 export const LoadingScreen = ( { traceId, operationId }: { traceId: string, operationId: string } ): JSX.Element => {
     const { t } = useTranslation();
-    const [ currentStatus, setCurrentStatus ] = useState("Initializing...");
+    // const [ currentStatus, setCurrentStatus ] = useState("Initializing...");
     const [ progress, setProgress ] = useState(0);
     const [ factIndex, setFactIndex ] = useState(0);
     const facts: string[] = [
@@ -42,6 +42,8 @@ export const LoadingScreen = ( { traceId, operationId }: { traceId: string, oper
         isGeneratingBranding,
         mergedBrandingPreference,
         setGeneratingBranding,
+        currentStatus,
+        setCurrentStatus
          } = useAIBrandingPreference();
 
     const [ polling, setPolling ] = useState(isGeneratingBranding);
@@ -125,6 +127,19 @@ export const LoadingScreen = ( { traceId, operationId }: { traceId: string, oper
         }
     };
 
+    const fetchBrandingPreference = async () => {
+        try {
+            const response: AxiosResponse<any> = await axios.get(
+                `http://0.0.0.0:8080/t/cryd1/api/server/v1/branding-preference/result/${operationId}`,
+                { headers: { "correlation-id": traceId } }
+            );
+            // console.log("Branding preference: ", response.data.data);
+            return response.data.data;
+        } catch (error) {
+            console.error("Error while fetching branding preference: ", error);
+        }
+    };
+
     const updateProgress = (fetchedStatus: Record<string, any>) => {
         let latestCompletedStep: string = t("branding:ai.screens.loading.states.0");
         let currentProgress: number = 0;
@@ -134,6 +149,7 @@ export const LoadingScreen = ( { traceId, operationId }: { traceId: string, oper
                 fetchedStatus[key] ||
                 (fetchedStatus.branding_generation_status && fetchedStatus.branding_generation_status[key])
             ) {
+                setCurrentStatus(statusLabels[key]);
                 latestCompletedStep = statusLabels[key];
                 currentProgress = statusProgress[key];
             }
@@ -166,6 +182,10 @@ export const LoadingScreen = ( { traceId, operationId }: { traceId: string, oper
             setCurrentStatus(statusLabels["branding_generation_completed"]);
             console.log("######Branding generation completed######");
             setPolling(false);
+            fetchBrandingPreference().then(brandingPreference => {
+                console.log("Branding preference: ", brandingPreference);
+                handleGenerate(brandingPreference);
+            });
         }
     };
 
@@ -174,7 +194,6 @@ export const LoadingScreen = ( { traceId, operationId }: { traceId: string, oper
 
         const interval: NodeJS.Timeout = setInterval(async () => {
             const fetchedStatus: Record<string, any> = await fetchProgress();
-
             updateProgress(fetchedStatus);
         }, 1000);
 

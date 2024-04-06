@@ -300,8 +300,6 @@ const BrandingCore: FunctionComponent<BrandingCoreInterface> = (
             console.log("Overriden preference: ", overridenBrandingPreference);
 
             setBrandingPreference(overridenBrandingPreference);
-
-            debugger;
         }
     }, [ overridenBrandingPreference ]);
 
