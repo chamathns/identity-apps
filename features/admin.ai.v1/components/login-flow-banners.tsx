@@ -16,12 +16,14 @@
  * under the License.
  */
 
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+import { styled } from "@mui/system";
 import { ChevronUpIcon, XMarkIcon }from "@oxygen-ui/react-icons";
 import Button from "@oxygen-ui/react/Button";
 import { DocumentationLink, GenericIcon } from "@wso2is/react-components";
 import React, { ReactElement, useContext, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Header, Icon, Segment, TextArea } from "semantic-ui-react";
+import { Header, Icon, Input, Segment, TextArea } from "semantic-ui-react";
 import { ReactComponent as AIIcon }
     from "../../../modules/theme/src/themes/wso2is/assets/images/icons/solid-icons/twinkle-ai-solid.svg";
 import AILoginFlowContext from "../context/login-flow-context";
@@ -39,6 +41,61 @@ interface LoginFLowBannerProps {
 }
 const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): ReactElement => {
 
+    const grey = {
+        50: "#F3F6F9",
+        100: "#E5EAF2",
+        200: "#DAE2ED",
+        300: "#C7D0DD",
+        400: "#B0B8C4",
+        500: "#9DA8B7",
+        600: "#6B7A90",
+        700: "#434D5B",
+        800: "#303740",
+        900: "#1C2025"
+    };
+
+    const orange = {
+        100: "#FFE8D9",
+        200: "#FFD0B5",
+        300: "#FFB088",
+        400: "#FF9466",
+        500: "#F9703E",
+        600: "#F35627",
+        700: "#DE3A11",
+        800: "#B31D0E",
+        900: "#8B0E07"
+    };
+
+    const Textarea = styled(TextareaAutosize)(
+        ({ theme }) => `
+        box-sizing: border-box;
+        width: 320px;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        padding: 8px 12px;
+        border-radius: 8px;
+        color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+        background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+        border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
+        box-shadow: 0px 2px 2px ${theme.palette.mode === "dark" ? grey[900] : grey[50]};
+    
+        &:hover {
+          border-color: ${orange[200]};
+        }
+    
+        &:focus {
+          border-color: ${orange[200]};
+        //   box-shadow: 0 0 0 2px ${theme.palette.mode === "dark" ? orange[600] : orange[200]};
+        }
+    
+        // firefox
+        &:focus-visible {
+          outline: 0;
+        }
+      `
+    );
     const { t } = useTranslation();
     /**
      * Load login flow context.
@@ -53,6 +110,12 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
         setBannerState(BannerState.Input);
     };
 
+    const [ loginFlowInput, setLoginFlowInput ] = useState("");
+
+    const handleInputChange = (event) => {
+        setLoginFlowInput(event.target.value);
+    };
+
     //Banner collapse button click event handler.
     const handleBannerCollapseButtonClick = () => {
         setBannerState(BannerState.Collapsed);
@@ -63,19 +126,12 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
         setBannerState(BannerState.Null);
     };
 
-    //Generate branding button click event handler.
-    const handleGenerateButtonClick = (e:any) => {
-        /*
-        * Get the user input from the text area.
-        * Prevent the browser from reloading the page
-        */
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const loginFlowInput = formData.get("loginFlowInput").toString();
 
-        // const loginFlowInput = "I'm setting up a two-step login process. First, all users enter their username and password. If the user is a manager, they're then asked for a TOTP code from their authenticator app. If they're not a manager, they skip this step and go straight in after entering their password."
+    const handleGenerateButtonClick = (event) => {
+        event.preventDefault(); // Prevent the form from being submitted
+        // Now you can process the input value
+        console.log(loginFlowInput);
         onGenerateClick(loginFlowInput);
-
     };
 
 
@@ -158,108 +214,73 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
                             </DocumentationLink>
                         </p>
                     </div>
-
-                </div>
-                <form onSubmit={ handleGenerateButtonClick }>
                     <div
                         style={ {
+                            alignItems: "center",
                             display: "flex",
                             justifyContent: "space-between",
-                            position: "relative",
-                            height: "100%",
-                            alignItems: "center"
+                            paddingTop: "20px"
+
                         } }>
-                        <TextArea
-                            name="loginFlowInput"
-                            placeholder={ t("ai:banner.input.placeholder") }
+                        <Textarea
+                            minRows={ 3 }
+                            maxRows={ 4 }
                             style={ {
-                                width: "80%",
-                                minHeight: "10px",
-                                maxHeight: "50px",
-                                overflowX: "hidden",
-                                overflowY: "auto",
-                                border: "1px solid grey",
-                                resize: "vertical",
-                                boxSizing: "border-box",
-                                padding: "10px"
+                                width: "70%"
                             } }
+                            autoFocus
+                            placeholder={ t("ai:banner.input.placeholder") }
+                            value={ loginFlowInput }
+                            onChange={ handleInputChange }
                         />
-                        <Button type="submit" color="secondary" variant="outlined" style= { { height: "25%", alignItems:"center" } }>
-                            <GenericIcon icon={ AIIcon } style={ { paddingRight: "5px" } }/>
+                        <Button
+                            onClick={ handleGenerateButtonClick }
+                            color="secondary"
+                            variant="outlined"
+                            style={ { marginLeft: "auto" } }
+                        >
+                            <GenericIcon
+                                style={ { paddingRight: "5px" } }
+                                icon={ AIIcon }
+                            />
                             { t("ai:banner.input.button") }
                         </Button>
                     </div>
-                </form>
+                </div>
             </div>
         </Segment>
     );
 
     // Collapsed Banner.
     const CollapsedBanner = () => (
-        <Segment
-            basic
-            style={ {
-                background: "white",
-                borderRadius: "8px",
-                height:"auto",
-                padding: "10px"
-            } }
-        >
+        <Segment>
             <div
                 style={ {
                     display: "flex",
-                    flexDirection: "column",
-                    padding: "0px",
-                    position: "relative"
+                    alignItems: "center",
+                    padding: "10px",
+                    justifyContent: "space-between"
                 } }>
-                <div
-                    style={ {
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-                    } }>
-                    <button
-                        onClick={ handleDeleteButtonCLick }
-                        style={ {  backgroundColor: "transparent",
-                            position: "absolute",
-                            right: "5px",
-                            top: "5px",
-                            padding:"5px 10px",
-                            border: "none",
-                            cursor: "pointer" } }>
-                        <XMarkIcon />
-                    </button>
-                    <Header as="h3">{ t("ai:banner.collapsed.heading") }</Header>
+                <div>
+                    <Header as="h3" style={ { marginBottom: "5px" } }>{ t("ai:banner.input.heading") }</Header>
+                    <p>
+                        { t("ai:banner.input.subheading") }
+                        <DocumentationLink
+                            link={ "develop.applications.editApplication.asgardeoTryitApplication.general.learnMore" }
+                            isLinkRef={ true }>
+                            <Trans i18nKey={ "extensions:common.learnMore" }>
+                                Learn more
+                            </Trans>
+                        </DocumentationLink>
+                    </p>
                 </div>
-                <div
-                    style={ {
-                        display: "flex",
-                        justifyContent: "space-between",
-                        position: "relative",
-                        alignItems: "center"
-                    } }>
-                    <div>
-                        <p>
-                            { t("ai:banner.collapsed.subheading") }
-                            <DocumentationLink
-                                link={ "develop.applications.editApplication.asgardeoTryitApplication.general.learnMore" }
-                                isLinkRef={ true }>
-                                <Trans i18nKey={ "extensions:common.learnMore" }>
-                                        Learn more
-                                </Trans>
-                            </DocumentationLink>
-                        </p>
-                    </div>
-                    <Button onClick={ handleTryLoginFlowButtonClick } color="secondary" variant="outlined">
-                        <GenericIcon icon={ AIIcon } style={ { paddingRight: "5px" } }/>
-                        { t("ai:banner.collapsed.button") }
-                    </Button>
-                </div>
+                <Button onClick={ handleTryLoginFlowButtonClick } color="secondary" variant="outlined">
+                    <GenericIcon icon={ AIIcon } style={ { paddingRight: "5px" } }/>
+                    { t("ai:banner.collapsed.button") }
+                </Button>
             </div>
         </Segment>
     );
-
-
 
     return (
         <>
