@@ -115,17 +115,18 @@ const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element => {
                 error.response.status === 404 &&
                 error.response.data.detail === "No login flow generation request with the provided tracking reference."
             ) {
+                return error.response.data.status;
 
-                return {optimizing_and_validating_user_query: true,
-                        optimization_and_validation_complete: true,
-                        retrieving_examples: true,
-                        retrieval_of_examples_complete: true,
-                        generating_login_flow_script: true,
-                        generation_of_login_flow_script_complete: true,
-                        generating_login_flow_authenticators: true,
-                        generation_of_login_flow_authenticators_complete: true,
-                        optimizing_and_validating_final_login_flow: true,
-                        login_flow_generation_complete: true};
+                // return {optimizing_and_validating_user_query: true,
+                //         optimization_and_validation_complete: true,
+                //         retrieving_examples: true,
+                //         retrieval_of_examples_complete: true,
+                //         generating_login_flow_script: true,
+                //         generation_of_login_flow_script_complete: true,
+                //         generating_login_flow_authenticators: true,
+                //         generation_of_login_flow_authenticators_complete: true,
+                //         optimizing_and_validating_final_login_flow: true,
+                //         login_flow_generation_complete: true};
             }
         }
     };

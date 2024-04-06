@@ -19,6 +19,7 @@
 import { IdentityAppsApiException } from "@wso2is/core/exceptions";
 import { AlertLevels } from "@wso2is/core/models";
 import { addAlert } from "@wso2is/core/store";
+import axios from "axios";
 import React, { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -44,123 +45,134 @@ export type AILoginFlowProviderProps = unknown;
  * @returns Sign On Mehtods provider.
  */
 
+const generateAILoginFlow = (
+    userQuery, userClaims, availableAuthenticators, traceId
+) => {
+    console.log("/generate TraceId: ", traceId);
+    return axios.post(
+        "http://0.0.0.0:8081/loginflow/generate",
+        { user_query: userQuery, user_claims: userClaims, available_authenticators: availableAuthenticators },
+        { headers: { "trace-id": traceId, Accept: "application/json", "Content-Type": "application/json" } }
+    )
+        .then(response => ({ loginFlow: response.data, isError: false, error: null }))
+        .catch(error => ({ loginFlow: null, isError: true, error: error }));
+};
+
+const getLoginFlow = (generatedLoginFlow) => ({
+    attributeStepId: generatedLoginFlow.authenticationSequence.attributeStepId,
+    requestPathAuthenticators: [],
+    steps: generatedLoginFlow.authenticationSequence.steps,
+    script: generatedLoginFlow.script,
+    type: generatedLoginFlow.type,
+    subjectStepId: generatedLoginFlow.subjectStepId
+});
+
 const AILoginFlowProvider =(props: React.PropsWithChildren<AILoginFlowProviderProps>): React.ReactElement=>{
 
     const { children } = props;
 
     const { t } = useTranslation();
-    /**
-     * Get the disbles features for application.
-     */
     const disabledFeatures: string[] = window["AppUtils"]?.getConfig()?.ui?.features?.applications?.disabledFeatures;
-
-    /**
-     * State to hold the login flow banner state.
-     */
     const [ bannerState, setBannerState ] = useState<BannerState>(BannerState.Full);
-    /**
-     * State to hold the generated login flow.
-     */
     const [ aiGeneratedAiLoginFlow, setAiGeneratedAiLoginFlow ] = useState<AuthenticationSequenceInterface>(undefined);
-    /**
-     * State to hold whether the AI login flow generation is requested.
-     */
     const [ isAiLoginFlowGenerationRequested, setIsAiLoginFlowGenerationRequested ] = useState<boolean>(false);
-    /**
-     * State to hold the trace id.
-     */
-    const [ traceId, setTraceId ] = useState<string>("");
-
-    /**
-     * Dispatch to add an alert.
-      */
+    const [ traceId, setTraceId ] = useState<string>("custom-ai-login-flow");
     const dispatch: Dispatch = useDispatch();
-
-    /**
-    * Hook to fetch the recent application status.
-    */
     const { refetchApplication } = useAuthenticationFlow();
 
-    /**
-     * Callback fucntion to handle the 'Generate' button click in login-flow-banner component.
-     */
-    const handleGenerateButtonClick = (userInput:string) => {
-        /**
-        * Trigger the callback function passed from the parent component.
-        * Initialize the traceId.
-        * Triger loading screen component rendering.
-        */
-        setIsAiLoginFlowGenerationRequested(true);
-        setTraceId(uuidv4());
+    const handleGenerateButtonClick = async (userInput:string) => {
 
-        //temporary authenticator details
-        // Need to add authenitcator details fetching logic to fetch-user-authenticators.ts
-        const available_authenticators= [
+        // const trace_id = uuidv4();
+        // setTraceId(trace_id);
+
+        const available_authenticators: { authenticator: string, idp: string }[] = [
             { "authenticator": "BasicAuthenticator", "idp": "LOCAL" },
             { "authenticator" : "GoogleAuthenticator", "idp": "google123" },
             { "authenticator":"email-otp-authenticator", "idp" : "LOCAL" },
             { "authenticator": "totp", "idp": "LOCAL" },
             { "authenticator" : "FIDOAuthenticator","idp" : "abcxyz" },
             { "authenticator" : "MagicLinkAuthenticator","idp" : "LOCAL" }
-
         ];
 
+        setIsAiLoginFlowGenerationRequested(true);
+        try {
+            const claimsResponse = await fetchUserClaims();
+
+            if (claimsResponse.error) {
+                throw claimsResponse.error;
+            }
+
+            const loginFlowResponse = await generateAILoginFlow(
+                userInput, claimsResponse.claimURIs, available_authenticators, traceId
+            );
+
+            if (loginFlowResponse.isError) {
+                throw loginFlowResponse.error;
+            }
+
+            setAiGeneratedAiLoginFlow(getLoginFlow(loginFlowResponse.loginFlow));
+        } catch (error) {
+            dispatch(addAlert({
+                description: error?.response?.data?.detail || t("some.error.translation.path"),
+                level: AlertLevels.ERROR,
+                message: "Error"
+            }));
+        } finally {
+            setBannerState(BannerState.Collapsed);
+            setIsAiLoginFlowGenerationRequested(false);
+        }
         /**
         * Fetching user claims
         */
-        fetchUserClaims()
-            .then((response:{claimURIs: ClaimURIs[]; error: IdentityAppsApiException;}) => {
-                if (response.error) {
-                    dispatch(addAlert(
-                        {
-                            description: response.error?.response?.data?.description
-                                || t("console:manage.features.claims.local.notifications.getClaims.genericError.description"),
-                            level: AlertLevels.ERROR,
-                            message: response.error?.response?.data?.message
-                                || t("console:manage.features.claims.local.notifications.getClaims.genericError.message")
-                        }
-                    ));
+        // fetchUserClaims()
+        //     .then((response:{claimURIs: ClaimURIs[]; error: IdentityAppsApiException;}) => {
+        //         if (response.error) {
+        //             dispatch(addAlert(
+        //                 {
+        //                     description: response.error?.response?.data?.description
+        //                         || t("console:manage.features.claims.local.notifications.getClaims.genericError.description"),
+        //                     level: AlertLevels.ERROR,
+        //                     message: response.error?.response?.data?.message
+        //                         || t("console:manage.features.claims.local.notifications.getClaims.genericError.message")
+        //                 }
+        //             ));
 
-                    return ({ loginFlow: null, isError: true, error: response.error });
-                }else{
-                    /**
-                    * API call to generate AI login flow.
-                    */
-                    return useGenerateAILoginFlow(userInput, response.claimURIs, available_authenticators, traceId);
-                }
-            })
-            .then((response:{loginFlow:any; isError:boolean; error:any}) => {
-                if (response.isError) {
-                    dispatch(
-                        addAlert({
-                            description: response.error.data.detail,
-                            level: AlertLevels.ERROR,
-                            message: "Error"
-                        })
-                    );
-                    () => refetchApplication();
-                }else{
-                    setAiGeneratedAiLoginFlow(useGetLoginFLow(response.loginFlow));
-                }
-            })
-            .catch((error) => {
-                dispatch(
-                    addAlert({
-                        description: error?.response?.data?.detail,
-                        level: AlertLevels.ERROR,
-                        message: "Error"
-                    })
-                );
-                () => refetchApplication();
-            })
-            .finally(() => {
-                setBannerState(BannerState.Collapsed);
-                setIsAiLoginFlowGenerationRequested(false);
-            });
-
-
-
-
+        //             return ({ loginFlow: null, isError: true, error: response.error });
+        //         }else{
+        //             /**
+        //             * API call to generate AI login flow.
+        //             */
+        //             return useGenerateAILoginFlow(userInput, response.claimURIs, available_authenticators, traceId);
+        //         }
+        //     })
+        //     .then((response:{loginFlow:any; isError:boolean; error:any}) => {
+        //         if (response.isError) {
+        //             dispatch(
+        //                 addAlert({
+        //                     description: response.error.data.detail,
+        //                     level: AlertLevels.ERROR,
+        //                     message: "Error"
+        //                 })
+        //             );
+        //             () => refetchApplication();
+        //         }else{
+        //             setAiGeneratedAiLoginFlow(useGetLoginFLow(response.loginFlow));
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         dispatch(
+        //             addAlert({
+        //                 description: error?.response?.data?.detail,
+        //                 level: AlertLevels.ERROR,
+        //                 message: "Error"
+        //             })
+        //         );
+        //         () => refetchApplication();
+        //     })
+        //     .finally(() => {
+        //         setBannerState(BannerState.Collapsed);
+        //         setIsAiLoginFlowGenerationRequested(false);
+        //     });
     };
 
     return (
