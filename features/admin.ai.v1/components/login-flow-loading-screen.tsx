@@ -32,9 +32,9 @@ const LoadingScreen = ( { traceId }: { traceId: string } ): JSX.Element => {
     const [ progress, setProgress ] = useState(0);
     const [ factIndex, setFactIndex ] = useState(0);
     const facts: string[] = [
-        t("ai:screens.loading.facts.0"),
-        t("ai:screens.loading.facts.1"),
-        t("ai:screens.loading.facts.2"),
+        "Asgardeo features a visual editor that enables you to intuitively configure authentication flows by visually placing authenticators and conditional elements, streamlining the design process and enhancing the ease of creating complex authentication sequences.",
+        "With conditional authentication scripts, you can create dynamic authentication sequences that can control step selection, modify user attributes, send email notifications, or redirect users, providing a versatile toolset for authentication flows.",
+        "Asgardeo features an authentication script editor which allows you to introduce new functions and fields, giving you the flexibility to tailor authentication scripts to meet your specific application requirements."
     ];
     const [ polling, setPolling ] = useState(true);
 

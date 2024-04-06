@@ -70,9 +70,9 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
         ({ theme }) => `
         box-sizing: border-box;
         width: 320px;
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 400;
+        // font-family: 'IBM Plex Sans', sans-serif;
+        // font-size: 0.875rem;
+        // font-weight: 400;
         line-height: 1.5;
         padding: 8px 12px;
         border-radius: 8px;
@@ -131,7 +131,8 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
         event.preventDefault(); // Prevent the form from being submitted
         // Now you can process the input value
         console.log(loginFlowInput);
-        onGenerateClick(loginFlowInput);
+        const data = "I'm setting up a two-step login process. First, all users enter their username and password. If the user is a manager, they're then asked for a TOTP code. If they're not a manager, they skip this step and go straight in after entering their password."
+        onGenerateClick(data);
     };
 
 
@@ -202,9 +203,9 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
                         padding: "10px"
                     } }>
                     <div>
-                        <Header as="h3" style={ { marginBottom: "5px" } }>{ t("ai:banner.input.heading") }</Header>
+                        <Header as="h3" style={ { marginBottom: "5px" } }>Craft Your Login Flow Effortlessly Using Login AI</Header>
                         <p>
-                            { t("ai:banner.input.subheading") }
+                            AI-powered login configurations crafted to align with your application&apos;s environment and authenticators.
                             <DocumentationLink
                                 link={ "develop.applications.editApplication.asgardeoTryitApplication.general.learnMore" }
                                 isLinkRef={ true }>
@@ -229,7 +230,7 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
                                 width: "70%"
                             } }
                             autoFocus
-                            placeholder={ t("ai:banner.input.placeholder") }
+                            placeholder="Describe your login flow"
                             value={ loginFlowInput }
                             onChange={ handleInputChange }
                         />
@@ -262,9 +263,9 @@ const LoginFLowBanner: React.FC<LoginFLowBannerProps> = ({ onGenerateClick }): R
                     justifyContent: "space-between"
                 } }>
                 <div>
-                    <Header as="h3" style={ { marginBottom: "5px" } }>{ t("ai:banner.input.heading") }</Header>
+                    <Header as="h3" style={ { marginBottom: "5px" } }>Craft Your Login Flow Effortlessly Using Login AI</Header>
                     <p>
-                        { t("ai:banner.input.subheading") }
+                        AI-powered login configurations crafted to align with your application&apos;s environment and authenticators.
                         <DocumentationLink
                             link={ "develop.applications.editApplication.asgardeoTryitApplication.general.learnMore" }
                             isLinkRef={ true }>

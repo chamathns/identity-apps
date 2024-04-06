@@ -48,7 +48,7 @@ export const BrandingAIBanner: FunctionComponent<BrandingAIBannerProps> = (
 
     const { t } = useTranslation();
     const [ bannerState, setBannerState ] = useState<BannerState>(BannerState.Full);
-    const [ websiteUrl, setWebsiteUrl ] = useState<string>("https://www.dialog.lk/");
+    const [ websiteUrl, setWebsiteUrl ] = useState<string>("");
 
     const { handleGenerate,
         isGeneratingBranding,
