@@ -45,7 +45,7 @@ export const BrandingAIBanner = (
 
     const { t } = useTranslation();
     const [ bannerState, setBannerState ] = useState<BannerState>(BannerState.Full);
-    const [ websiteUrl, setWebsiteUrl ] = useState<string>("https://drogo-nft-demo.web.app/");
+    const [ websiteUrl, setWebsiteUrl ] = useState<string>("");
 
     const { isGeneratingBranding } = useAIBrandingPreference();
 
