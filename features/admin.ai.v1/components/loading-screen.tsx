@@ -37,6 +37,8 @@ export const LoadingScreen = (): JSX.Element => {
         t("branding:ai.screens.loading.facts.2")
     ];
 
+    const [ currentProgress, setCurrentProgress ] = useState(0);
+
     const { operationId } = useAIBrandingPreference();
 
     const { data, isLoading } = useGetAIBrandingGenerationStatus(operationId);
@@ -52,15 +54,38 @@ export const LoadingScreen = (): JSX.Element => {
         webpage_extraction_completed: t("branding:ai.screens.loading.states.3")
     };
 
+    useEffect(() => {
+        // Calculate the target progress based on the completed tasks
+        const targetProgress = getProgress();
+
+        // Start a timer that increments currentProgress until it reaches targetProgress
+        const interval: NodeJS.Timeout = setInterval(() => {
+            setCurrentProgress((prevProgress) => {
+                if (prevProgress >= targetProgress) {
+                    // Clear the timer if currentProgress has reached targetProgress
+                    clearInterval(interval);
+
+                    return targetProgress;
+                } else {
+                    // Increment currentProgress by 1% (adjust this value as needed)
+                    return prevProgress + 1;
+                }
+            });
+        }, 100); // Update every 100ms (adjust this value as needed)
+
+        // Clear the timer when the component unmounts or when the target progress changes
+        return () => clearInterval(interval);
+    }, [ data ]);
+
     const statusProgress: Record<string, number> = {
         branding_generation_completed: 100,
-        color_palette: 75,
-        create_branding_theme: 97,
-        extract_webpage_content: 25,
-        generate_branding: 50,
+        color_palette: 95,
+        create_branding_theme: 99,
+        extract_webpage_content: 15,
+        generate_branding: 94,
         render_webpage: 10,
-        style_properties: 95,
-        webpage_extraction_completed: 30
+        style_properties: 98,
+        webpage_extraction_completed: 20
     };
 
     useEffect(() => {
@@ -105,7 +130,7 @@ export const LoadingScreen = (): JSX.Element => {
                     <Box className="loading-screen-facts">
                         <Box className="loading-screen-facts-content">
                             <Typography variant="h5" className="loading-screen-facts-text">
-                                Did you know?
+                                { t("branding:ai.screens.loading.didYouKNow") }
                             </Typography>
                             <Typography
                                 variant="body1"
@@ -120,7 +145,7 @@ export const LoadingScreen = (): JSX.Element => {
                     </Box>
                 </Box>
                 <Box className="loading-screen-progress">
-                    <LinearProgress variant="determinate" value={ getProgress() } />
+                    <LinearProgress variant="determinate" value={ currentProgress } />
                 </Box>
                 <Box className="loading-screen-status">
                     { isLoading && <CircularProgress size={ 20 } className="loading-screen-status-progress" /> }
